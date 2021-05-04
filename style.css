@@ -109,7 +109,9 @@ main{
     top: 0;
     left: 0;
     z-index: 1;
+
     opacity: 0;
+    pointer-events: none;
 }
 .info{
     width: 550px;
@@ -126,6 +128,10 @@ main{
     border-radius: 10px;
     box-shadow: 1px 1px 4px rgb(92, 92, 92);
     z-index: 2;
+
+    opacity: 0;
+    pointer-events: none;
+
 }
 .info_content{
     display: flex;
