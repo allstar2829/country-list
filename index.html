@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+      integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="reset.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js"
+      integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.js"
+      integrity="sha512-Kg0CewqPNO/ziOJuCq5eyl3P/V6OLz/Lb1I2m+yKS3lHZcGVFN/KOew18rWP+kTsL7haYdaqGjwHQCZrN0heLQ=="
+      crossorigin="anonymous"
+    ></script>
+    <script></script>
+    <title>index</title>
+  </head>
+  <body>
+    <div id="app">
+      <nav>
+        <h1>COUNTRY LIST</h1>
+        <div class="searchBar">
+          <input type="text" placeholder="S E A R C H" />
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </div>
+      </nav>
+
+      <main>
+        <div class="intro">
+          <p>Get information about countries via a RESTful API</p>
+          <div class="orderBtn">
+            <i class="fa fa-list" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <div class="content">
+          <ul>
+            <li
+              v-for="(item,index) in items"
+              @click="info_Open"
+              :class="{'-active': info}"
+              :class="{'-activeBg': infoBg}"
+            >
+              <img :src="item.flag" />
+            </li>
+          </ul>
+        </div>
+      </main>
+
+      <!-- 資訊彈窗 -->
+      <div class="infoBg" @click="info_Close"></div>
+      <div class="info">
+        <div class="info_content">
+          <img :src="item.flag" />
+          <div class="info_text">
+            <ul>
+              <li>- {{items[index].name}}</li>
+              <br />
+              <li>2位國家代碼 : {{items[index].alpha2Code}}</li>
+              <li>3位國家代碼 : {{(items[index].alpha3Code}}</li>
+              <li>母語名稱 : {{items[index].nativeName}}</li>
+              <li>替代國家名稱 : {{items[index].altSpellings}}</li>
+              <li>國際電話區號 : {{items[index].callingCodes}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          items: [],
+          info: false,
+          infoBg: false,
+        },
+        methods: {
+          info_Open() {
+            this.info = true;
+            this.infoBg = true;
+          },
+          info_Close() {
+            this.info = false;
+            this.infoBg = false;
+          },
+        },
+        mounted() {
+          axios.get(`https://restcountries.eu/rest/v2/all`).then((response) => {
+            this.items = response.data.map((element) => element);
+          });
+        },
+      });
+    </script>
+  </body>
+</html>
