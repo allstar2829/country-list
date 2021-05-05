@@ -36,7 +36,7 @@
       <nav>
         <h1>COUNTRY LIST</h1>
         <div class="searchBar">
-          <input type="text" placeholder="S E A R C H" />
+          <input type="text" v-model="isSearch" placeholder="S E A R C H" />
           <i class="fa fa-search" aria-hidden="true"></i>
         </div>
       </nav>
@@ -44,36 +44,57 @@
       <main>
         <div class="intro">
           <p>Get information about countries via a RESTful API</p>
-          <div class="orderBtn">
+          <div class="orderBtn" @click="changeOrder">
             <i class="fa fa-list" aria-hidden="true"></i>
           </div>
         </div>
 
         <div class="content">
           <ul>
-            <li v-for="(item,index) in allcountries" >
-              <img :src="item.flag" @click="current_choosed_info = index"/>
+            <li v-for="(item,index) in orderedCountries">
+              <img :src="item.flag" @click="current_choosed_info = index" />
             </li>
           </ul>
         </div>
       </main>
 
       <!-- 資訊彈窗 -->
-      <div class="infoBg" v-if="current_choosed_info !== null" @click="info_Close"></div>
-      <div class="info" v-if="current_choosed_info !== null">
-        <div class="info_content">
-          <img :src="allcountries[current_choosed_info].flag" />
-          <ul>
+      <transition name="fade">
+        <div
+          class="infoBg"
+          v-if="current_choosed_info !== null"
+          @click="info_Close"
+        ></div>
+      </transition>
+
+      <transition name="fade">
+        <div class="info" v-if="current_choosed_info !== null">
+          <div class="info_content">
+            <img :src="allcountries[current_choosed_info].flag" />
+            <ul>
               <li>- {{allcountries[current_choosed_info].name}}</li>
               <br />
-              <li>2位國家代碼 : {{allcountries[current_choosed_info].alpha2Code}}</li>
-              <li>3位國家代碼 : {{allcountries[current_choosed_info].alpha3Code}}</li>
-              <li>母語名稱 : {{allcountries[current_choosed_info].nativeName}}</li>
-              <li>替代國家名稱 : {{allcountries[current_choosed_info].altSpellings}}</li>
-              <li>國際電話區號 : {{allcountries[current_choosed_info].callingCodes}}</li>
-          </ul>
-        <div>
-      </div>
+              <li>
+                2位國家代碼 : {{allcountries[current_choosed_info].alpha2Code}}
+              </li>
+              <li>
+                3位國家代碼 : {{allcountries[current_choosed_info].alpha3Code}}
+              </li>
+              <li>
+                母語名稱 : {{allcountries[current_choosed_info].nativeName}}
+              </li>
+              <li>
+                替代國家名稱 :
+                {{allcountries[current_choosed_info].altSpellings}}
+              </li>
+              <li>
+                國際電話區號 :
+                {{allcountries[current_choosed_info].callingCodes}}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </transition>
     </div>
 
     <script>
@@ -82,15 +103,49 @@
         data: {
           allcountries: [],
           current_choosed_info: null,
+          isReverse: false,
+          isSearch: "",
         },
         methods: {
-          info_Open(){
-            this.current_choosed_info = index
-            
+          info_Open() {
+            this.current_choosed_info = index;
           },
           info_Close() {
-            this.current_choosed_info = null
-          }
+            this.current_choosed_info = null;
+          },
+          changeOrder() {
+            // this.isReverse = !this.isReverse
+            if (this.isReverse === true) {
+              this.isReverse = false;
+            } else {
+              this.isReverse = true;
+            }
+          },
+        },
+        computed: {
+          searchedCountries() {
+            const copiedData = this.allcountries.map((x) => x);
+
+            if (this.isSearch) {
+              return copiedData.filter((country) => {
+                return country.name
+                  .toLowerCase()
+                  .includes(this.isSearch.toLowerCase());
+              });
+            } else {
+              return copiedData;
+            }
+          },
+
+          orderedCountries() {
+            const copiedData = this.searchedCountries.map((x) => x);
+            
+            if (this.isReverse) {
+              return copiedData.reverse();
+            } else {
+              return copiedData;
+            }
+          },
         },
         mounted() {
           axios.get(`https://restcountries.eu/rest/v2/all`).then((response) => {
