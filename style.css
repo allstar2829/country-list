@@ -110,12 +110,13 @@ main{
     left: 0;
     z-index: 1;
 
-    opacity: 0;
-    pointer-events: none;
+    opacity: .8;
+    pointer-events: auto;
+    transition: .6s ease;
 }
 .info{
-    width: 550px;
-    height: 210px;
+    width: 700px;
+    height: 250px;
     padding: 30px;
     background-color: rgb(255, 255, 255);
     
@@ -129,14 +130,12 @@ main{
     box-shadow: 1px 1px 4px rgb(92, 92, 92);
     z-index: 2;
 
-    opacity: 0;
-    pointer-events: none;
-
+    opacity: 1;
+    pointer-events: auto;
+    transition: .6s ease;
 }
 .info_content{
     display: flex;
-    justify-content: center;
-    align-content: center;
 }
 .info img{
     width: 300px;
@@ -147,12 +146,4 @@ main{
 }
 .info li{
     margin-bottom: 8px;
-}
-.-activeBg{
-    opacity: .8;
-    pointer-events: auto;
-}
-.-active{
-    opacity: 1;
-    pointer-events: auto;
 }

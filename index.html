@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -51,35 +51,28 @@
 
         <div class="content">
           <ul>
-            <li
-              v-for="(item,index) in items"
-              @click="info_Open"
-              :class="{'-active': info}"
-              :class="{'-activeBg': infoBg}"
-            >
-              <img :src="item.flag" />
+            <li v-for="(item,index) in allcountries" >
+              <img :src="item.flag" @click="current_choosed_info = index"/>
             </li>
           </ul>
         </div>
       </main>
 
       <!-- 資訊彈窗 -->
-      <div class="infoBg" @click="info_Close"></div>
-      <div class="info">
-        <!-- <div class="info_content">
-          <img :src="item.flag" />
-          <div class="info_text">
-            <ul>
-              <li>- {{items[index].name}}</li>
+      <div class="infoBg" v-if="current_choosed_info !== null" @click="info_Close"></div>
+      <div class="info" v-if="current_choosed_info !== null">
+        <div class="info_content">
+          <img :src="allcountries[current_choosed_info].flag" />
+          <ul>
+              <li>- {{allcountries[current_choosed_info].name}}</li>
               <br />
-              <li>2位國家代碼 : {{items[index].alpha2Code}}</li>
-              <li>3位國家代碼 : {{(items[index].alpha3Code}}</li>
-              <li>母語名稱 : {{items[index].nativeName}}</li>
-              <li>替代國家名稱 : {{items[index].altSpellings}}</li>
-              <li>國際電話區號 : {{items[index].callingCodes}}</li>
-            </ul>
-          </div> -->
-        </div>
+              <li>2位國家代碼 : {{allcountries[current_choosed_info].alpha2Code}}</li>
+              <li>3位國家代碼 : {{allcountries[current_choosed_info].alpha3Code}}</li>
+              <li>母語名稱 : {{allcountries[current_choosed_info].nativeName}}</li>
+              <li>替代國家名稱 : {{allcountries[current_choosed_info].altSpellings}}</li>
+              <li>國際電話區號 : {{allcountries[current_choosed_info].callingCodes}}</li>
+          </ul>
+        <div>
       </div>
     </div>
 
@@ -87,23 +80,21 @@
       new Vue({
         el: "#app",
         data: {
-          items: [],
-          info: false,
-          infoBg: false,
+          allcountries: [],
+          current_choosed_info: null,
         },
         methods: {
-          info_Open() {
-            this.info = true;
-            this.infoBg = true;
+          info_Open(){
+            this.current_choosed_info = index
+            
           },
           info_Close() {
-            this.info = false;
-            this.infoBg = false;
-          },
+            this.current_choosed_info = null
+          }
         },
         mounted() {
           axios.get(`https://restcountries.eu/rest/v2/all`).then((response) => {
-            this.items = response.data.map((element) => element);
+            this.allcountries = response.data.map((element) => element);
           });
         },
       });
