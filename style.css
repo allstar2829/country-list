@@ -171,10 +171,10 @@ main{
     height: 1.3rem;
     border-radius: 50%;
     background-color: transparent;
-    transition: all .6s;
+    transition: all .3s;
     color: #acacac;
 }
 
 .fa-caret-left:hover,.fa-caret-right:hover{
-    background-color: #acacac3d;
+    background-color: #acacac2d;
 }
