@@ -1,7 +1,8 @@
-
-/* *{
+/* 
+*{
     outline: 1px solid red;
 } */
+
 body{
     font-family: 'Work Sans', sans-serif;
     background-color: #fff;
@@ -155,4 +156,25 @@ main{
 }
 .fade-enter, .fade-leave-to{
     opacity: 0;
+}
+
+/* 分頁 */
+
+.pagination{
+    text-align: center;
+    margin-top: 50px;
+    font-size: 1.3rem;
+}
+
+.fa-caret-left,.fa-caret-right{
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    background-color: transparent;
+    transition: all .6s;
+    color: #acacac;
+}
+
+.fa-caret-left:hover,.fa-caret-right:hover{
+    background-color: #acacac3d;
 }
