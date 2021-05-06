@@ -106,7 +106,7 @@
       <div class="btn2" style="text-align: center;">2</div>
 
       <div class="pagination">
-        <i class="fa fa-caret-left" aria-hidden="true"></i> 1 /   10 <i class="fa fa-caret-right" aria-hidden="true"></i>
+        <i class="fa fa-caret-left" aria-hidden="true"></i> {{currentPage}} / {{tableData/pageSize}} <i class="fa fa-caret-right" aria-hidden="true"></i>
       </div>
 
     </div>
@@ -121,7 +121,7 @@
           isSearch: "",
           tableData: 1,
           pageSize: 25,
-          currentPage: 1,
+          currentPage: 2,
         },
         methods: {
           info_Open() {
@@ -175,19 +175,16 @@
             console.log('開始筆數', start, '結束筆數', end);
 
             return this.allcountries.slice(start,end) || []
-            
-            // return this.allcountries.slice((this.allcountries.length-1)*this.pageSize,(this.allcountries.length)*this.pageSize)
-            // return this.tableData.slice( (this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize ) || []
           },
         },
 
         mounted() {
           axios.get(`https://restcountries.eu/rest/v2/all`).then((response) => {
             this.allcountries = response.data.map((element) => element);
+            this.tableData = this.allcountries.length
           });
-
-          this.tableData = this.allcountries.length
         },
+
       });
     </script>
   </body>
