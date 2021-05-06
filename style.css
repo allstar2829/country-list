@@ -6,6 +6,7 @@
 body{
     font-family: 'Work Sans', sans-serif;
     background-color: #fff;
+    overflow-x: hidden;
 }
 
 /* 上方標題與搜尋 */
@@ -162,7 +163,7 @@ main{
 
 .pagination{
     text-align: center;
-    margin-top: 50px;
+    margin: 40px auto;
     font-size: 1.3rem;
 }
 
