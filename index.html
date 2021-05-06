@@ -70,26 +70,26 @@
       <transition name="fade">
         <div class="info" v-if="current_choosed_info !== null">
           <div class="info_content">
-            <img :src="allcountries[current_choosed_info].flag" />
+            <img :src="orderedCountries[current_choosed_info].flag" />
             <ul>
-              <li>- {{allcountries[current_choosed_info].name}}</li>
+              <li>- {{orderedCountries[current_choosed_info].name}}</li>
               <br />
               <li>
-                2位國家代碼 : {{allcountries[current_choosed_info].alpha2Code}}
+                2位國家代碼 : {{orderedCountries[current_choosed_info].alpha2Code}}
               </li>
               <li>
-                3位國家代碼 : {{allcountries[current_choosed_info].alpha3Code}}
+                3位國家代碼 : {{orderedCountries[current_choosed_info].alpha3Code}}
               </li>
               <li>
-                母語名稱 : {{allcountries[current_choosed_info].nativeName}}
+                母語名稱 : {{orderedCountries[current_choosed_info].nativeName}}
               </li>
               <li>
                 替代國家名稱 :
-                {{allcountries[current_choosed_info].altSpellings}}
+                {{orderedCountries[current_choosed_info].altSpellings}}
               </li>
               <li>
                 國際電話區號 :
-                {{allcountries[current_choosed_info].callingCodes}}
+                {{orderedCountries[current_choosed_info].callingCodes}}
               </li>
             </ul>
           </div>
@@ -139,7 +139,7 @@
 
           orderedCountries() {
             const copiedData = this.searchedCountries.map((x) => x);
-            
+
             if (this.isReverse) {
               return copiedData.reverse();
             } else {
