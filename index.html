@@ -55,10 +55,9 @@
               <img :src="item.flag" @click="current_choosed_info = index" />
             </li> -->
 
-            <li v-for="(item,index) in nowTableData">
+            <li v-for="(item,index) in showTableData">
               <img :src="item.flag" @click="current_choosed_info = index" />
             </li>
-
           </ul>
         </div>
       </main>
@@ -80,10 +79,12 @@
               <li>- {{orderedCountries[current_choosed_info].name}}</li>
               <br />
               <li>
-                2位國家代碼 : {{orderedCountries[current_choosed_info].alpha2Code}}
+                2位國家代碼 :
+                {{orderedCountries[current_choosed_info].alpha2Code}}
               </li>
               <li>
-                3位國家代碼 : {{orderedCountries[current_choosed_info].alpha3Code}}
+                3位國家代碼 :
+                {{orderedCountries[current_choosed_info].alpha3Code}}
               </li>
               <li>
                 母語名稱 : {{orderedCountries[current_choosed_info].nativeName}}
@@ -101,14 +102,11 @@
         </div>
       </transition>
 
-
-      <div class="btn1" @click= "showTableData" style="text-align: center;">1</div>
-      <div class="btn2" style="text-align: center;">2</div>
-
       <div class="pagination">
-        <i class="fa fa-caret-left" aria-hidden="true"></i> {{currentPage}} / {{tableData/pageSize}} <i class="fa fa-caret-right" aria-hidden="true"></i>
+        <i class="fa fa-caret-left" @click="previousPage"></i>
+        {{currentPage}} / {{tableData/pageSize}}
+        <i class="fa fa-caret-right" @click="nextPage"></i>
       </div>
-
     </div>
 
     <script>
@@ -121,7 +119,7 @@
           isSearch: "",
           tableData: 1,
           pageSize: 25,
-          currentPage: 2,
+          currentPage: 1,
         },
         methods: {
           info_Open() {
@@ -138,9 +136,20 @@
               this.isReverse = true;
             }
           },
-          showTableData(){
-            return this.nowTableData;
-          }
+          showTable(){
+            return this.showTableData;
+            // 第一次載入預設第一頁 25筆資料
+          },
+          previousPage() {
+            // console.log("pre");
+            if (this.currentPage > 1){
+              this.currentPage -= 1;
+            }
+          },
+          nextPage() {
+            // console.log("next");
+            this.currentPage += 1 && this.currentPage < 10;
+          },
         },
         computed: {
           searchedCountries() {
@@ -167,24 +176,24 @@
             }
           },
 
-          nowTableData(){
-            console.log('長度',this.currentPage - 1 );
-            console.log('顯示筆數', this.pageSize);
-            const start = (this.currentPage - 1 )* this.pageSize
-            const end = (this.currentPage)* this.pageSize
-            console.log('開始筆數', start, '結束筆數', end);
+          showTableData() {
+            // console.log('長度',this.currentPage - 1 );
+            // console.log('顯示筆數', this.pageSize);
+            const start = (this.currentPage - 1) * this.pageSize;
+            const end = this.currentPage * this.pageSize;
+            // console.log('開始筆數', start, '結束筆數', end);
 
-            return this.allcountries.slice(start,end) || []
+            return this.allcountries.slice(start, end) || [];
           },
         },
 
         mounted() {
           axios.get(`https://restcountries.eu/rest/v2/all`).then((response) => {
             this.allcountries = response.data.map((element) => element);
-            this.tableData = this.allcountries.length
+
+            this.tableData = this.allcountries.length;
           });
         },
-
       });
     </script>
   </body>
