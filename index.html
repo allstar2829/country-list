@@ -74,28 +74,28 @@
       <transition name="fade">
         <div class="info" v-if="current_choosed_info !== null">
           <div class="info_content">
-            <img :src="orderedCountries[current_choosed_info].flag" />
+            <img :src="showTableData[current_choosed_info].flag" />
             <ul>
-              <li>- {{orderedCountries[current_choosed_info].name}}</li>
+              <li>- {{showTableData[current_choosed_info].name}}</li>
               <br />
               <li>
                 2位國家代碼 :
-                {{orderedCountries[current_choosed_info].alpha2Code}}
+                {{showTableData[current_choosed_info].alpha2Code}}
               </li>
               <li>
                 3位國家代碼 :
-                {{orderedCountries[current_choosed_info].alpha3Code}}
+                {{showTableData[current_choosed_info].alpha3Code}}
               </li>
               <li>
-                母語名稱 : {{orderedCountries[current_choosed_info].nativeName}}
+                母語名稱 : {{showTableData[current_choosed_info].nativeName}}
               </li>
               <li>
                 替代國家名稱 :
-                {{orderedCountries[current_choosed_info].altSpellings}}
+                {{showTableData[current_choosed_info].altSpellings}}
               </li>
               <li>
                 國際電話區號 :
-                {{orderedCountries[current_choosed_info].callingCodes}}
+                {{showTableData[current_choosed_info].callingCodes}}
               </li>
             </ul>
           </div>
@@ -184,7 +184,7 @@
             const end = this.currentPage * this.pageSize;
             // console.log('開始筆數', start, '結束筆數', end);
 
-            return this.allcountries.slice(start, end) || [];
+            return this.allcountries.slice(start, end);
           },
         },
 
