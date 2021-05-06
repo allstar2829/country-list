@@ -148,7 +148,8 @@
           },
           nextPage() {
             // console.log("next");
-            this.currentPage += 1 && this.currentPage < 10;
+            // this.currentPage += 1 && this.currentPage < 10;
+            this.currentPage += 1 && this.currentPage < (this.tableData/this.pageSize);
           },
         },
         computed: {
