@@ -29,7 +29,7 @@
       crossorigin="anonymous"
     ></script>
     <script></script>
-    <title>index</title>
+    <title>COUNTRY LIST</title>
   </head>
   <body>
     <div id="app">
@@ -55,8 +55,8 @@
               <img :src="item.flag" @click="current_choosed_info = index" />
             </li> -->
 
-            <li v-for="(item,index) in showTableData">
-              <img :src="item.flag" @click="current_choosed_info = index" />
+            <li v-for="(item,index) in orderedCountries">
+              <img :src="item.flag" @click="info_Open(index)" />
             </li>
           </ul>
         </div>
@@ -74,28 +74,28 @@
       <transition name="fade">
         <div class="info" v-if="current_choosed_info !== null">
           <div class="info_content">
-            <img :src="showTableData[current_choosed_info].flag" />
+            <img :src="orderedCountries[current_choosed_info].flag" />
             <ul>
-              <li>- {{showTableData[current_choosed_info].name}}</li>
+              <li>- {{orderedCountries[current_choosed_info].name}}</li>
               <br />
               <li>
                 2位國家代碼 :
-                {{showTableData[current_choosed_info].alpha2Code}}
+                {{orderedCountries[current_choosed_info].alpha2Code}}
               </li>
               <li>
                 3位國家代碼 :
-                {{showTableData[current_choosed_info].alpha3Code}}
+                {{orderedCountries[current_choosed_info].alpha3Code}}
               </li>
               <li>
-                母語名稱 : {{showTableData[current_choosed_info].nativeName}}
+                母語名稱 : {{orderedCountries[current_choosed_info].nativeName}}
               </li>
               <li>
                 替代國家名稱 :
-                {{showTableData[current_choosed_info].altSpellings}}
+                {{orderedCountries[current_choosed_info].altSpellings}}
               </li>
               <li>
                 國際電話區號 :
-                {{showTableData[current_choosed_info].callingCodes}}
+                {{orderedCountries[current_choosed_info].callingCodes}}
               </li>
             </ul>
           </div>
@@ -122,7 +122,7 @@
           currentPage: 1,
         },
         methods: {
-          info_Open() {
+          info_Open(index) {
             this.current_choosed_info = index;
           },
           info_Close() {
@@ -136,10 +136,10 @@
               this.isReverse = true;
             }
           },
-          showTable(){
-            return this.showTableData;
-            // 第一次載入預設第一頁 25筆資料
-          },
+          // showTable(){
+          //   return this.showTableData;
+          //   // 第一次載入預設第一頁 25筆資料
+          // },
           previousPage() {
             // console.log("pre");
             if (this.currentPage > 1){
@@ -154,10 +154,19 @@
         },
         computed: {
           searchedCountries() {
-            const copiedData = this.allcountries.map((x) => x);
+
+            const start = (this.currentPage - 1) * this.pageSize;
+            const end = this.currentPage * this.pageSize;
+            const copiedData = [];
+
+            this.allcountries.forEach((x, index) => {
+              if (index >= start && index < end) {
+                copiedData.push(x);
+              }
+            });
 
             if (this.isSearch) {
-              return copiedData.filter((country) => {
+              return this.allcountries.filter((country) => {
                 return country.name
                   .toLowerCase()
                   .includes(this.isSearch.toLowerCase());
@@ -177,15 +186,17 @@
             }
           },
 
-          showTableData() {
-            // console.log('長度',this.currentPage - 1 );
-            // console.log('顯示筆數', this.pageSize);
-            const start = (this.currentPage - 1) * this.pageSize;
-            const end = this.currentPage * this.pageSize;
-            // console.log('開始筆數', start, '結束筆數', end);
+          // showTableData() {
+          //   const copiedData = this.searchedCountries.map((x) => x);
+            
+          //   // console.log('長度',this.currentPage - 1 );
+          //   // console.log('顯示筆數', this.pageSize);
+          //   const start = (this.currentPage - 1) * this.pageSize;
+          //   const end = this.currentPage * this.pageSize;
+          //   // console.log('開始筆數', start, '結束筆數', end);
 
-            return this.allcountries.slice(start, end);
-          },
+          //   return copiedData.slice(start, end);
+          // },
         },
 
         mounted() {
