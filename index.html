@@ -110,7 +110,7 @@
 
       <div class="pagination">
         <i class="fa fa-caret-left" @click="previousPage"></i>
-        {{currentPage}} / {{allPage}}}
+        {{currentPage}} / {{allPage}}
         <i class="fa fa-caret-right" @click="nextPage"></i>
       </div>
     </div>
@@ -127,7 +127,7 @@
           pageSize: 25,
           currentPage: 1,
           allPage: 0,
-          isSearch2: false,
+          isSearch2: true,
         },
         methods: {
           info_Open(index) {
@@ -138,11 +138,17 @@
           },
           changeOrder() {
             // this.isReverse = !this.isReverse
+            // if (this.isReverse === true) {
+            //   this.isReverse = false;
+            // } else {
+            //   this.isReverse = true;
+            // }
             if (this.isReverse === true) {
               this.isReverse = false;
             } else {
               this.isReverse = true;
             }
+            this.isSearch2 = false;
           },
           // showTable(){
           //   return this.showTableData;
@@ -199,44 +205,50 @@
             //   return copiedData;
             // }
 
-            if (this.isSearch2) {
-              this.currentPage = 1;
-            }
             const copiedData = []; //存放要顯示的陣列
-
             if (this.isSearch != "") {
               //有搜尋的狀況
-              this.isSearch2 = true;
-
+              if (this.isSearch2) {
+                this.currentPage = 1;
+              }
               let start = (this.currentPage - 1) * this.pageSize;
               let end = this.currentPage * this.pageSize;
-
               let searchedCountryData = this.allcountries.filter((country) => {
                 return country.name
                   .toLowerCase()
                   .includes(this.isSearch.toLowerCase());
               });
-
               this.tableData = searchedCountryData.length; //要抓符合條件的國家來重新除出頁數
+              if (this.tableData < end - this.pageSize) {
+                //如果長度不服一定要先歸零
+                this.currentPage = 1;
+                start = (this.currentPage - 1) * this.pageSize;
+                end = this.currentPage * this.pageSize;
+              }
               //整理成要顯示的國家陣列
               searchedCountryData.forEach((x, index) => {
                 if (index >= start && index < end) {
                   copiedData.push(x);
                 }
               });
+              this.isSearch2 = true;
               return copiedData;
             } else {
-              this.isSearch2 = false;
+              this.tableData = this.allcountries.length; //全撈的長度
+              if (
+                this.isSearch2 &&
+                this.tableData == this.allcountries.length
+              ) {
+                this.currentPage = 1;
+              }
               let start = (this.currentPage - 1) * this.pageSize;
               let end = this.currentPage * this.pageSize;
-
               this.allcountries.forEach((x, index) => {
                 if (index >= start && index < end) {
                   copiedData.push(x);
                 }
               });
-              //這裡時沒有搜尋的狀況，恢復原狀
-              this.tableData = this.allcountries.length;
+
               return copiedData;
             }
           },
@@ -257,7 +269,7 @@
             } else {
               this.allPage = Math.ceil(this.tableData / this.pageSize);
             }
-
+            this.isSearch2 = true;
             if (this.isReverse) {
               return copiedData.reverse();
             } else {
@@ -281,7 +293,7 @@
         mounted() {
           axios.get(`https://restcountries.eu/rest/v2/all`).then((response) => {
             this.allcountries = response.data.map((element) => element);
-            
+
             this.tableData = this.allcountries.length;
             this.allPage = Math.ceil(this.tableData / this.pageSize);
           });
