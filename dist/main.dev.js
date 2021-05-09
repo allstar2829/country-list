@@ -9,8 +9,8 @@ new Vue({
     isSearch: "",
     tableData: 1,
     pageSize: 25,
-    currentPage: 1,
-    searchedCountriesNum: 1
+    currentPage: 1 // searchedCountriesNum: 1,
+
   },
   methods: {
     info_Open: function info_Open(index) {
@@ -93,8 +93,12 @@ new Vue({
         return x;
       }); // console.log('長度',this.currentPage - 1 );
       // console.log('顯示筆數', this.pageSize);
+      //  console.log(this.orderedCountries.length);
+      //   if (this.currentPage > this.maxPage()){
+      //     this.currentPag = 1
+      //   }
+      //   判斷search的時候 分頁的狀態, 此處已用 keyup 的 reset替代寫了
 
-      console.log(this.orderedCountries.length);
       var start = (this.currentPage - 1) * this.pageSize;
       var end = this.currentPage * this.pageSize; // console.log('開始筆數', start, '結束筆數', end);
 
