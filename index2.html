@@ -33,76 +33,12 @@
   </head>
 
   <body>
-    <div id="app">
-      <nav>
-        <h1>COUNTRY LIST</h1>
-        <div class="searchBar">
-          <input type="text" v-model="isSearch" placeholder="S E A R C H" @keyup="reset"/>
-          <i class="fa fa-search" aria-hidden="true"></i>
-        </div>
-      </nav>
+    <div id="app"></div>
 
-      <main>
-        <div class="intro">
-          <p>Get information about countries via a RESTful API</p>
-          <div class="orderBtn" @click="changeOrder">
-            <i class="fa fa-list" aria-hidden="true"></i>
-          </div>
-        </div>
-
-        <div class="content">
-          <ul>
-            <li v-for="(item,index) in showTableData">
-              <img :src="item.flag" @click="info_Open(index)" />
-            </li>
-          </ul>
-        </div>
-      </main>
-
-      <!-- 資訊彈窗 -->
-      <transition name="fade">
-        <div
-          class="infoBg"
-          v-if="current_choosed_info !== null"
-          @click="info_Close"
-        ></div>
-      </transition>
-
-      <transition name="fade">
-        <div class="info" v-if="current_choosed_info !== null">
-          <div class="info_content">
-            <img :src="showTableData[current_choosed_info].flag" />
-            <ul>
-              <li>- {{showTableData[current_choosed_info].name}}</li>
-              <br />
-              <li>
-                2位國家代碼 : {{showTableData[current_choosed_info].alpha2Code}}
-              </li>
-              <li>
-                3位國家代碼 : {{showTableData[current_choosed_info].alpha3Code}}
-              </li>
-              <li>
-                母語名稱 : {{showTableData[current_choosed_info].nativeName}}
-              </li>
-              <li>
-                替代國家名稱 :
-                {{showTableData[current_choosed_info].altSpellings}}
-              </li>
-              <li>
-                國際電話區號 :
-                {{showTableData[current_choosed_info].callingCodes}}
-              </li>
-            </ul>
-          </div>
-        </div>
-      </transition>
-
-      <div class="pagination">
-        <i class="fa fa-caret-left" @click="previousPage"></i>
-        {{currentPage}} / {{maxPage()}}
-        <i class="fa fa-caret-right" @click="nextPage"></i>
-      </div>
-    </div>
+    <!-- 測試 -->
+    <!-- <div id="app">
+      <card :parent-msg="searchedCountries"></card>
+    </div> -->
 
     <script src="main.js"></script>
   </body>
