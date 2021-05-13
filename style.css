@@ -10,14 +10,14 @@ body{
 }
 
 /* 上方標題與搜尋 */
-nav{
+.topBar{
     width: 100vw;
     height: 80px;
     background-color: #eee;
     opacity: .9;
     display: flex;
 }
-h1{
+.topBar h1{
     width: 100%;
     text-align: center;
     font-size: 2rem;

@@ -33,12 +33,45 @@
   </head>
 
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <main-nav @update-text="getString"></main-nav>
 
-    <!-- 測試 -->
-    <!-- <div id="app">
-      <card :parent-msg="searchedCountries"></card>
-    </div> -->
+      <!-- <card :parent-msg="maxPage()"></card>
+      <card :parent-msg="showTableData[0]"></card>
+      <card :parent-msg="pageSize"></card>
+      <card v-for="(item,index) in showTableData" :parent-msg="item.flag"></card> -->
+
+      <main>
+        
+        <div class="intro">
+          <p>Get information about countries via a RESTful API</p>
+          <order-btn></order-btn>
+        </div>
+
+        <div class="content">
+          <ul>
+                                  <!-- 此處 item = showTableData[index] -->
+            <content-data :show-table-data="item" :key="index" v-for="(item,index) in showTableData"></content-data>
+          </ul>
+        </div>
+      </main>
+
+      <!-- 資訊彈窗 -->
+      <!-- <transition name="fade">
+        <info-bg></info-bg>
+      </transition> -->
+
+      <!-- <transition name="fade">
+        <info :show-table-data="showTableData[item]"></info>
+      </transition> -->
+
+      <!-- <pagination></pagination> -->
+      <!-- <div class="pagination">
+        <i class="fa fa-caret-left" @click="previousPage"></i>
+        {{currentPage}} / {{maxPage()}}
+        <i class="fa fa-caret-right" @click="nextPage"></i>
+      </div> -->
+    </div>
 
     <script src="main.js"></script>
   </body>

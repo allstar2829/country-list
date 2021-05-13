@@ -1,5 +1,174 @@
-new Vue({
+// 測試
+Vue.component('card', {
+  template: `
+    <div class="card">
+      自己打字 {{msg}} {{parentMsg}}
+    </div>`,
+  props: ["parentMsg"],
+  data: () => {
+    return {
+      msg: '這是子元件的 data'
+    }
+  }
+});
+
+Vue.component('main-nav', {
+  template: `
+    <div class="topBar">
+      <h1>COUNTRY LIST</h1>
+      <search-bar @update-text="getChildText"></search-bar>
+    </div>
+  `,
+  methods:{
+    getChildText(searchText){
+      // return searchText
+      // 得到search-bar 內傳回值
+      this.$emit("update-text", searchText);
+      // 直接再把searchText 傳出去
+    },
+  }
+});
+
+Vue.component('search-bar', {
+  template: `
+    <div class="searchBar">
+      <input type="text" v-model="searchString" @input="sendToParent" placeholder="S E A R C H" />
+      <i class="fa fa-search" aria-hidden="true"></i>
+    </div>
+  `,
+  data() {
+    return {
+      searchString: ""
+    }
+  },
+  methods:{
+    sendToParent() {
+      if(this.searchString !== ""){
+        this.$emit("update-text", this.searchString)
+      }
+    }
+  }
+});
+
+Vue.component('order-btn', {
+  template: `
+    <div class="orderBtn" @click="changeOrder">
+      <i class="fa fa-list" aria-hidden="true"></i>
+    </div>`
+  ,
+  data(){
+    return{
+      isReverse: false,
+    }
+  },
+  methods:{
+    changeOrder() {
+      this.isReverse = !this.isReverse;
+    },
+  }
+});
+
+// Vue.component('info-bg', {
+//   template: `
+//     <div
+//       class="infoBg"
+//       v-if="current_choosed_info !== null"
+//       @click="info_Close"
+//     ></div>
+//     `,
+//   data(){
+//     return{
+//       current_choosed_info: null,
+//     }
+//   },
+//   methods:{
+//     info_Close() {
+//       this.current_choosed_info = null;
+//     },
+//   }
+// });
+
+Vue.component("info", {
+  template: `
+    <div class="info">
+      <div class="info_content">
+        <img :src="showTableData.flag" />
+        <ul>
+          <li>- {{showTableData.name}}</li>
+          <br />
+          <li>
+            2位國家代碼 : {{showTableData.alpha2Code}}
+          </li>
+          <li>
+            3位國家代碼 : {{showTableData.alpha3Code}}
+          </li>
+          <li>
+            母語名稱 : {{showTableData.nativeName}}
+          </li>
+          <li>
+            替代國家名稱 :
+            {{showTableData.altSpellings}}
+          </li>
+          <li>
+            國際電話區號 :
+            {{showTableData.callingCodes}}
+          </li>
+        </ul>
+      </div>
+    </div>
+    `,
+  props: ['show-table-data'],
+});
+
+
+Vue.component('content-data', {
+  template: `
+    <li @click="info_Open">
+      <img :src="showTableData.flag" />
+    </li>
+  `,
+  props: ["show-table-data"],
+  methods:{
+    info_Open() {
+      console.log('aaa') 
+    },
+  }
+});
+
+// Vue.component('pagination', {
+//   template: `
+//     <div class="pagination">
+//       <i class="fa fa-caret-left" @click="previousPage"></i>
+//       {{currentPage}} / {{maxPage()}}
+//       <i class="fa fa-caret-right" @click="nextPage"></i>
+//     </div>
+//   `,
+//   methods:{
+//     previousPage() {
+//       // console.log("pre");
+//       if (this.currentPage > 1) {
+//         this.currentPage -= 1;
+//       }
+//     },
+//     nextPage() {
+//       // console.log("next");
+//       //   this.currentPage +=
+//       //     1 && this.currentPage < this.searchedCountries / this.pageSize;
+//       if (this.currentPage === this.maxPage()) {
+//         return false;
+//       } else {
+//         this.currentPage += 1;
+//       }
+//     },
+//   }
+// });
+
+
+const app = new Vue({
   el: "#app",
+  // component:{
+  //   card
+  // },
   data: {
     allcountries: [],
     current_choosed_info: null,
@@ -55,6 +224,11 @@ new Vue({
     reset() {
       this.currentPage = 1;
     },
+    getString(string){
+      // console.log(string)
+      this.isSearch = string
+      // console.log(this.isSearch)
+    }
   },
   computed: {
     searchedCountries() {
@@ -103,31 +277,6 @@ new Vue({
       //   = return this.orderedCountries.length.slice(start, end);
     },
   },
-  template: `
-    <div>
-      <main-nav></main-nav>
-
-      <main>
-        <div class="intro">
-          <p>Get information about countries via a RESTful API</p>
-          <order-btn></order-btn>
-        </div>
-
-        <content></content>
-      </main>
-
-      <!-- 資訊彈窗 -->
-      <transition name="fade">
-        <info-bg></info-bg>
-      </transition>
-
-      <transition name="fade">
-        <info></info>
-      </transition>
-
-      <pagination></pagination>
-    </div>
-  `,
   mounted() {
     // this.testFunction();
 
@@ -137,120 +286,4 @@ new Vue({
       this.tableData = this.allcountries.length;
     });
   },
-});
-
-// 測試
-// Vue.component('card', {
-//   template: `
-//     <div class="card">
-//       自己打字 {{msg}} {{parentMsg}}
-//     </div>`,
-//   props: ["parentMsg"],
-//   data: () => {
-//     return {
-//       msg: '這是子元件的 data'
-//     }
-//   }
-// });
-
-
-Vue.component('main-nav', {
-  template: `
-    <nav>
-      <h1>COUNTRY LIST</h1>
-      <search-bar></search-bar>
-    </nav>
-  `,
-});
-
-Vue.component('search-bar', {
-  template: `
-    <div class="searchBar">
-      <input type="text" v-model="isSearch" placeholder="S E A R C H" @keyup="reset"/>
-      <i class="fa fa-search" aria-hidden="true"></i>
-    </div>
-  `,
-  data() {
-    return {
-      isSearch: '',
-    }
-  }
-});
-
-Vue.component('order-btn', {
-  template: `
-    <div class="orderBtn" @click="changeOrder">
-      <i class="fa fa-list" aria-hidden="true"></i>
-    </div>`
-  ,
-});
-
-Vue.component('info-bg', {
-  template: `
-    <div
-      class="infoBg"
-      v-if="current_choosed_info !== null"
-      @click="info_Close"
-    ></div>
-    `,
-});
-
-Vue.component("info", {
-  template: `
-    <div class="info" v-if="current_choosed_info !== null">
-      <div class="info_content">
-        <img :src="showTableData[current_choosed_info].flag" />
-        <ul>
-          <li>- {{showTableData[current_choosed_info].name}}</li>
-          <br />
-          <li>
-            2位國家代碼 : {{showTableData[current_choosed_info].alpha2Code}}
-          </li>
-          <li>
-            3位國家代碼 : {{showTableData[current_choosed_info].alpha3Code}}
-          </li>
-          <li>
-            母語名稱 : {{showTableData[current_choosed_info].nativeName}}
-          </li>
-          <li>
-            替代國家名稱 :
-            {{showTableData[current_choosed_info].altSpellings}}
-          </li>
-          <li>
-            國際電話區號 :
-            {{showTableData[current_choosed_info].callingCodes}}
-          </li>
-        </ul>
-      </div>
-    </div>
-    `,
-  props: ["current_choosed_info: null","showTableData"],
-});
-
-Vue.component('content', {
-  template: `
-    <div class="content">
-      <ul>
-        <content-data></content-data>
-      </ul>
-    </div>
-  `,
-});
-
-Vue.component('content-data', {
-  template: `
-    <li v-for="(item,index) in showTableData">
-      <img :src="item.flag" @click="info_Open(index)" />
-    </li>
-  `,
-});
-
-Vue.component('pagination', {
-  template: `
-    <div class="pagination">
-      <i class="fa fa-caret-left" @click="previousPage"></i>
-      {{currentPage}} / {{maxPage()}}
-      <i class="fa fa-caret-right" @click="nextPage"></i>
-    </div>
-  `,
 });

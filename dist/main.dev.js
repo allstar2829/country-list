@@ -1,7 +1,117 @@
 "use strict";
 
-new Vue({
+// 測試
+Vue.component('card', {
+  template: "\n    <div class=\"card\">\n      \u81EA\u5DF1\u6253\u5B57 {{msg}} {{parentMsg}}\n    </div>",
+  props: ["parentMsg"],
+  data: function data() {
+    return {
+      msg: '這是子元件的 data'
+    };
+  }
+});
+Vue.component('main-nav', {
+  template: "\n    <div class=\"topBar\">\n      <h1>COUNTRY LIST</h1>\n      <search-bar @update-text=\"getChildText\"></search-bar>\n    </div>\n  ",
+  methods: {
+    getChildText: function getChildText(searchText) {
+      // return searchText
+      // 得到search-bar 內傳回值
+      this.$emit("update-text", searchText); // 直接再把searchText 傳出去
+    }
+  }
+});
+Vue.component('search-bar', {
+  template: "\n    <div class=\"searchBar\">\n      <input type=\"text\" v-model=\"searchString\" @input=\"sendToParent\" placeholder=\"S E A R C H\" />\n      <i class=\"fa fa-search\" aria-hidden=\"true\"></i>\n    </div>\n  ",
+  data: function data() {
+    return {
+      searchString: ""
+    };
+  },
+  methods: {
+    sendToParent: function sendToParent() {
+      if (this.searchString !== "") {
+        this.$emit("update-text", this.searchString);
+      }
+    }
+  }
+});
+Vue.component('order-btn', {
+  template: "\n    <div class=\"orderBtn\" @click=\"changeOrder\">\n      <i class=\"fa fa-list\" aria-hidden=\"true\"></i>\n    </div>",
+  data: function data() {
+    return {
+      isReverse: false
+    };
+  },
+  methods: {
+    changeOrder: function changeOrder() {
+      this.isReverse = !this.isReverse;
+    }
+  }
+}); // Vue.component('info-bg', {
+//   template: `
+//     <div
+//       class="infoBg"
+//       v-if="current_choosed_info !== null"
+//       @click="info_Close"
+//     ></div>
+//     `,
+//   data(){
+//     return{
+//       current_choosed_info: null,
+//     }
+//   },
+//   methods:{
+//     info_Close() {
+//       this.current_choosed_info = null;
+//     },
+//   }
+// });
+
+Vue.component("info", {
+  template: "\n    <div class=\"info\">\n      <div class=\"info_content\">\n        <img :src=\"showTableData.flag\" />\n        <ul>\n          <li>- {{showTableData.name}}</li>\n          <br />\n          <li>\n            2\u4F4D\u570B\u5BB6\u4EE3\u78BC : {{showTableData.alpha2Code}}\n          </li>\n          <li>\n            3\u4F4D\u570B\u5BB6\u4EE3\u78BC : {{showTableData.alpha3Code}}\n          </li>\n          <li>\n            \u6BCD\u8A9E\u540D\u7A31 : {{showTableData.nativeName}}\n          </li>\n          <li>\n            \u66FF\u4EE3\u570B\u5BB6\u540D\u7A31 :\n            {{showTableData.altSpellings}}\n          </li>\n          <li>\n            \u570B\u969B\u96FB\u8A71\u5340\u865F :\n            {{showTableData.callingCodes}}\n          </li>\n        </ul>\n      </div>\n    </div>\n    ",
+  props: ['show-table-data']
+});
+Vue.component('content-data', {
+  template: "\n    <li @click=\"info_Open\">\n      <img :src=\"showTableData.flag\" />\n    </li>\n  ",
+  props: ["show-table-data"],
+  methods: {
+    info_Open: function info_Open() {
+      console.log('aaa');
+    }
+  }
+}); // Vue.component('pagination', {
+//   template: `
+//     <div class="pagination">
+//       <i class="fa fa-caret-left" @click="previousPage"></i>
+//       {{currentPage}} / {{maxPage()}}
+//       <i class="fa fa-caret-right" @click="nextPage"></i>
+//     </div>
+//   `,
+//   methods:{
+//     previousPage() {
+//       // console.log("pre");
+//       if (this.currentPage > 1) {
+//         this.currentPage -= 1;
+//       }
+//     },
+//     nextPage() {
+//       // console.log("next");
+//       //   this.currentPage +=
+//       //     1 && this.currentPage < this.searchedCountries / this.pageSize;
+//       if (this.currentPage === this.maxPage()) {
+//         return false;
+//       } else {
+//         this.currentPage += 1;
+//       }
+//     },
+//   }
+// });
+
+var app = new Vue({
   el: "#app",
+  // component:{
+  //   card
+  // },
   data: {
     allcountries: [],
     current_choosed_info: null,
@@ -56,6 +166,10 @@ new Vue({
     },
     reset: function reset() {
       this.currentPage = 1;
+    },
+    getString: function getString(string) {
+      // console.log(string)
+      this.isSearch = string; // console.log(this.isSearch)
     }
   },
   computed: {
@@ -105,7 +219,6 @@ new Vue({
       return copiedData.slice(start, end); //   = return this.orderedCountries.length.slice(start, end);
     }
   },
-  template: "\n    <div>\n      <main-nav></main-nav>\n\n      <main>\n        <div class=\"intro\">\n          <p>Get information about countries via a RESTful API</p>\n          <order-btn></order-btn>\n        </div>\n\n        <content></content>\n      </main>\n\n      <!-- \u8CC7\u8A0A\u5F48\u7A97 -->\n      <transition name=\"fade\">\n        <info-bg></info-bg>\n      </transition>\n\n      <transition name=\"fade\">\n        <info></info>\n      </transition>\n\n      <pagination></pagination>\n    </div>\n  ",
   mounted: function mounted() {
     var _this2 = this;
 
@@ -117,47 +230,4 @@ new Vue({
       _this2.tableData = _this2.allcountries.length;
     });
   }
-}); // 測試
-// Vue.component('card', {
-//   template: `
-//     <div class="card">
-//       自己打字 {{msg}} {{parentMsg}}
-//     </div>`,
-//   props: ["parentMsg"],
-//   data: () => {
-//     return {
-//       msg: '這是子元件的 data'
-//     }
-//   }
-// });
-
-Vue.component('main-nav', {
-  template: "\n    <nav>\n      <h1>COUNTRY LIST</h1>\n      <search-bar></search-bar>\n    </nav>\n  "
-});
-Vue.component('search-bar', {
-  template: "\n    <div class=\"searchBar\">\n      <input type=\"text\" v-model=\"isSearch\" placeholder=\"S E A R C H\" @keyup=\"reset\"/>\n      <i class=\"fa fa-search\" aria-hidden=\"true\"></i>\n    </div>\n  ",
-  data: function data() {
-    return {
-      isSearch: ''
-    };
-  }
-});
-Vue.component('order-btn', {
-  template: "\n    <div class=\"orderBtn\" @click=\"changeOrder\">\n      <i class=\"fa fa-list\" aria-hidden=\"true\"></i>\n    </div>"
-});
-Vue.component('info-bg', {
-  template: "\n    <div\n      class=\"infoBg\"\n      v-if=\"current_choosed_info !== null\"\n      @click=\"info_Close\"\n    ></div>\n    "
-});
-Vue.component("info", {
-  template: "\n    <div class=\"info\" v-if=\"current_choosed_info !== null\">\n      <div class=\"info_content\">\n        <img :src=\"showTableData[current_choosed_info].flag\" />\n        <ul>\n          <li>- {{showTableData[current_choosed_info].name}}</li>\n          <br />\n          <li>\n            2\u4F4D\u570B\u5BB6\u4EE3\u78BC : {{showTableData[current_choosed_info].alpha2Code}}\n          </li>\n          <li>\n            3\u4F4D\u570B\u5BB6\u4EE3\u78BC : {{showTableData[current_choosed_info].alpha3Code}}\n          </li>\n          <li>\n            \u6BCD\u8A9E\u540D\u7A31 : {{showTableData[current_choosed_info].nativeName}}\n          </li>\n          <li>\n            \u66FF\u4EE3\u570B\u5BB6\u540D\u7A31 :\n            {{showTableData[current_choosed_info].altSpellings}}\n          </li>\n          <li>\n            \u570B\u969B\u96FB\u8A71\u5340\u865F :\n            {{showTableData[current_choosed_info].callingCodes}}\n          </li>\n        </ul>\n      </div>\n    </div>\n    ",
-  props: ["current_choosed_info: null", "showTableData"]
-});
-Vue.component('content', {
-  template: "\n    <div class=\"content\">\n      <ul>\n        <content-data></content-data>\n      </ul>\n    </div>\n  "
-});
-Vue.component('content-data', {
-  template: "\n    <li v-for=\"(item,index) in showTableData\">\n      <img :src=\"item.flag\" @click=\"info_Open(index)\" />\n    </li>\n  "
-});
-Vue.component('pagination', {
-  template: "\n    <div class=\"pagination\">\n      <i class=\"fa fa-caret-left\" @click=\"previousPage\"></i>\n      {{currentPage}} / {{maxPage()}}\n      <i class=\"fa fa-caret-right\" @click=\"nextPage\"></i>\n    </div>\n  "
 });
