@@ -45,25 +45,34 @@
         
         <div class="intro">
           <p>Get information about countries via a RESTful API</p>
-          <order-btn></order-btn>
+          <order-btn @update-order="changeOrder"></order-btn>
         </div>
 
         <div class="content">
           <ul>
                                   <!-- 此處 item = showTableData[index] -->
-            <content-data :show-table-data="item" :key="index" v-for="(item,index) in showTableData"></content-data>
+            <!-- <content-data :show-table-data="item" :key="index" v-for="(item,index) in showTableData" @update-info-open="info_Open(index)"></content-data> -->
+
+            <!-- v-for 迴圈的 item,index 都只有for 迴圈可用 別再忘記了=_=! -->
+            <content-data :show-table-data="item" :key="index" v-for="(item,index) in showTableData" @click.native="info_Open(index)"></content-data>
           </ul>
         </div>
       </main>
 
       <!-- 資訊彈窗 -->
-      <!-- <transition name="fade">
-        <info-bg></info-bg>
-      </transition> -->
+      <transition name="fade">
+        <info-bg v-if="showTableData[current_choosed_info]"
+        @update-info-close="info_Close"></info-bg>
+      </transition>
 
-      <!-- <transition name="fade">
-        <info :show-table-data="showTableData[item]"></info>
-      </transition> -->
+      <transition name="fade">
+        <!-- show-table-data="item" > 會報錯, 因為item沒有vue實例中/ 只有剛剛for 迴圈有
+        所以改為判斷時看的index值 應該是 [current_choosed_info] -->
+        <!-- <info :show-table-data="showTableData[current_choosed_info]"></info> -->
+        <!-- info前加入 v-if 表示如果有資料 showTableData[current_choosed_info] 才顯示
+        因為也會有有資料但沒有項目的時候 > 所以info 內li 同理 -->
+        <info v-if="showTableData[current_choosed_info]" :show-table-data="showTableData[current_choosed_info]"></info>
+      </transition>
 
       <!-- <pagination></pagination> -->
       <!-- <div class="pagination">

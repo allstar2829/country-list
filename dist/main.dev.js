@@ -1,25 +1,37 @@
 "use strict";
 
 // 測試
-Vue.component('card', {
-  template: "\n    <div class=\"card\">\n      \u81EA\u5DF1\u6253\u5B57 {{msg}} {{parentMsg}}\n    </div>",
-  props: ["parentMsg"],
-  data: function data() {
-    return {
-      msg: '這是子元件的 data'
-    };
-  }
-});
+// Vue.component('card', {
+//   template: `
+//     <div class="card">
+//       自己打字 {{msg}} {{parentMsg}}
+//     </div>`,
+//   props: ["parentMsg"],
+//   data: () => {
+//     return {
+//       msg: '這是子元件的 data'
+//     }
+//   }
+// });
+// emit > 邏輯順序可以簡單想成: 
+// 1. 子層執行一件事情 > ex: @click/ @input
+// 2. 執行後啟動函式 > @click = "sendToParent"
+// 3. 父層html 如<div></div> 接住 @sendToParent 後
+// 4. 也執行父層函式 > @sendToParent="sendMeg"
+// 四個步驟缺一不可><! 別忘
 Vue.component('main-nav', {
   template: "\n    <div class=\"topBar\">\n      <h1>COUNTRY LIST</h1>\n      <search-bar @update-text=\"getChildText\"></search-bar>\n    </div>\n  ",
   methods: {
     getChildText: function getChildText(searchText) {
       // return searchText
-      // 得到search-bar 內傳回值
+      // 確定有得到search-bar 傳回值
       this.$emit("update-text", searchText); // 直接再把searchText 傳出去
+      // <main-nav> 接值 @update-text後, 執行"getString" 
     }
   }
-});
+}); // 組件內的data 必為函式, 如此重複使用組件才不會影醒彼此的值
+// 詳見語昕影片
+
 Vue.component('search-bar', {
   template: "\n    <div class=\"searchBar\">\n      <input type=\"text\" v-model=\"searchString\" @input=\"sendToParent\" placeholder=\"S E A R C H\" />\n      <i class=\"fa fa-search\" aria-hidden=\"true\"></i>\n    </div>\n  ",
   data: function data() {
@@ -36,47 +48,39 @@ Vue.component('search-bar', {
   }
 });
 Vue.component('order-btn', {
-  template: "\n    <div class=\"orderBtn\" @click=\"changeOrder\">\n      <i class=\"fa fa-list\" aria-hidden=\"true\"></i>\n    </div>",
+  template: "\n    <div class=\"orderBtn\" @click=\"changeChildOrder\">\n      <i class=\"fa fa-list\" aria-hidden=\"true\"></i>\n    </div>",
   data: function data() {
     return {
-      isReverse: false
+      isChildReverse: false
     };
   },
   methods: {
-    changeOrder: function changeOrder() {
-      this.isReverse = !this.isReverse;
+    changeChildOrder: function changeChildOrder() {
+      this.$emit("update-order", this.isChildReverse); // console.log(this.isChildReverse);
     }
   }
-}); // Vue.component('info-bg', {
-//   template: `
-//     <div
-//       class="infoBg"
-//       v-if="current_choosed_info !== null"
-//       @click="info_Close"
-//     ></div>
-//     `,
-//   data(){
-//     return{
-//       current_choosed_info: null,
-//     }
-//   },
-//   methods:{
-//     info_Close() {
-//       this.current_choosed_info = null;
-//     },
-//   }
-// });
+}); // 對比info, info-bg沒有引用父層資料 props: ['show-table-data'], 所以若 有加v-if =showTableData, 就會報錯 !
+
+Vue.component('info-bg', {
+  template: "\n    <div\n      class=\"infoBg\"\n      @click=\"info_Close_Child\"\n    ></div>\n    ",
+  methods: {
+    info_Close_Child: function info_Close_Child() {
+      this.$emit("update-info-close");
+    }
+  }
+}); // info藉由props 傳入資料後, 傳入的是showTableData內的[一筆資料] (showTableData[current_choosed_info])
 
 Vue.component("info", {
-  template: "\n    <div class=\"info\">\n      <div class=\"info_content\">\n        <img :src=\"showTableData.flag\" />\n        <ul>\n          <li>- {{showTableData.name}}</li>\n          <br />\n          <li>\n            2\u4F4D\u570B\u5BB6\u4EE3\u78BC : {{showTableData.alpha2Code}}\n          </li>\n          <li>\n            3\u4F4D\u570B\u5BB6\u4EE3\u78BC : {{showTableData.alpha3Code}}\n          </li>\n          <li>\n            \u6BCD\u8A9E\u540D\u7A31 : {{showTableData.nativeName}}\n          </li>\n          <li>\n            \u66FF\u4EE3\u570B\u5BB6\u540D\u7A31 :\n            {{showTableData.altSpellings}}\n          </li>\n          <li>\n            \u570B\u969B\u96FB\u8A71\u5340\u865F :\n            {{showTableData.callingCodes}}\n          </li>\n        </ul>\n      </div>\n    </div>\n    ",
+  template: "\n    <div class=\"info\" v-if=\"showTableData\">\n      <div class=\"info_content\">\n        <img v-if=\"showTableData.flag\" :src=\"showTableData.flag\" />\n        <ul>\n          <li v-if=\"showTableData.name\">- {{showTableData.name}}</li>\n          <br />\n          <li v-if=\"showTableData.alpha2Code\">\n            2\u4F4D\u570B\u5BB6\u4EE3\u78BC : {{showTableData.alpha2Code}}\n          </li>\n          <li v-if=\"showTableData.alpha3Code\">\n            3\u4F4D\u570B\u5BB6\u4EE3\u78BC : {{showTableData.alpha3Code}}\n          </li>\n          <li v-if=\"showTableData.nativeName\">\n            \u6BCD\u8A9E\u540D\u7A31 : {{showTableData.nativeName}}\n          </li>\n          <li v-if=\"showTableData.altSpellings\">\n            \u66FF\u4EE3\u570B\u5BB6\u540D\u7A31 :\n            {{showTableData.altSpellings}}\n          </li>\n          <li v-if=\"showTableData.callingCodes\">\n            \u570B\u969B\u96FB\u8A71\u5340\u865F :\n            {{showTableData.callingCodes}}\n          </li>\n        </ul>\n      </div>\n    </div>\n    ",
   props: ['show-table-data']
 });
 Vue.component('content-data', {
-  template: "\n    <li @click=\"info_Open\">\n      <img :src=\"showTableData.flag\" />\n    </li>\n  ",
+  template: "\n    <li>\n      <img :src=\"showTableData.flag\" @click=\"info_Open_Child\"/>\n    </li>\n  ",
   props: ["show-table-data"],
   methods: {
-    info_Open: function info_Open() {
-      console.log('aaa');
+    info_Open_Child: function info_Open_Child() {
+      // console.log('abc')
+      this.$emit("update-info-open");
     }
   }
 }); // Vue.component('pagination', {
@@ -119,8 +123,7 @@ var app = new Vue({
     isSearch: "",
     tableData: 1,
     pageSize: 25,
-    currentPage: 1 // searchedCountriesNum: 1,
-
+    currentPage: 1
   },
   methods: {
     info_Open: function info_Open(index) {
@@ -139,9 +142,9 @@ var app = new Vue({
       }
     },
     nextPage: function nextPage() {
-      console.log("next"); //   this.currentPage +=
+      // console.log("next");
+      //   this.currentPage +=
       //     1 && this.currentPage < this.searchedCountries / this.pageSize;
-
       if (this.currentPage === this.maxPage()) {
         return false;
       } else {
@@ -207,11 +210,11 @@ var app = new Vue({
         return x;
       }); // console.log('長度',this.currentPage - 1 );
       // console.log('顯示筆數', this.pageSize);
-      //  console.log(this.orderedCountries.length);
+      // console.log(this.orderedCountries.length);
       //   if (this.currentPage > this.maxPage()){
       //     this.currentPag = 1
       //   }
-      //   判斷search的時候 分頁的狀態, 此處已用 keyup 的 reset替代寫了
+      //   判斷search的分頁的狀態, 此處已用 keyup 的 reset替代寫了
 
       var start = (this.currentPage - 1) * this.pageSize;
       var end = this.currentPage * this.pageSize; // console.log('開始筆數', start, '結束筆數', end);

@@ -1,16 +1,23 @@
 // 測試
-Vue.component('card', {
-  template: `
-    <div class="card">
-      自己打字 {{msg}} {{parentMsg}}
-    </div>`,
-  props: ["parentMsg"],
-  data: () => {
-    return {
-      msg: '這是子元件的 data'
-    }
-  }
-});
+// Vue.component('card', {
+//   template: `
+//     <div class="card">
+//       自己打字 {{msg}} {{parentMsg}}
+//     </div>`,
+//   props: ["parentMsg"],
+//   data: () => {
+//     return {
+//       msg: '這是子元件的 data'
+//     }
+//   }
+// });
+
+// emit > 邏輯順序可以簡單想成: 
+// 1. 子層執行一件事情 > ex: @click/ @input
+// 2. 執行後啟動函式 > @click = "sendToParent"
+// 3. 父層html 如<div></div> 接住 @sendToParent 後
+// 4. 也執行父層函式 > @sendToParent="sendMeg"
+// 四個步驟缺一不可><! 別忘
 
 Vue.component('main-nav', {
   template: `
@@ -22,13 +29,17 @@ Vue.component('main-nav', {
   methods:{
     getChildText(searchText){
       // return searchText
-      // 得到search-bar 內傳回值
+      // 確定有得到search-bar 傳回值
       this.$emit("update-text", searchText);
       // 直接再把searchText 傳出去
+      // <main-nav> 接值 @update-text後, 執行"getString" 
     },
   }
 });
 
+
+// 組件內的data 必為函式, 如此重複使用組件才不會影醒彼此的值
+// 詳見語昕影片
 Vue.component('search-bar', {
   template: `
     <div class="searchBar">
@@ -52,64 +63,61 @@ Vue.component('search-bar', {
 
 Vue.component('order-btn', {
   template: `
-    <div class="orderBtn" @click="changeOrder">
+    <div class="orderBtn" @click="changeChildOrder">
       <i class="fa fa-list" aria-hidden="true"></i>
     </div>`
   ,
   data(){
     return{
-      isReverse: false,
+      isChildReverse: false
     }
   },
   methods:{
-    changeOrder() {
-      this.isReverse = !this.isReverse;
+    changeChildOrder() {
+      this.$emit("update-order",this.isChildReverse);
+      // console.log(this.isChildReverse);
     },
   }
 });
 
-// Vue.component('info-bg', {
-//   template: `
-//     <div
-//       class="infoBg"
-//       v-if="current_choosed_info !== null"
-//       @click="info_Close"
-//     ></div>
-//     `,
-//   data(){
-//     return{
-//       current_choosed_info: null,
-//     }
-//   },
-//   methods:{
-//     info_Close() {
-//       this.current_choosed_info = null;
-//     },
-//   }
-// });
+// 對比info, info-bg沒有引用父層資料 props: ['show-table-data'], 所以若 有加v-if =showTableData, 就會報錯 !
+Vue.component('info-bg', {
+  template: `
+    <div
+      class="infoBg"
+      @click="info_Close_Child"
+    ></div>
+    `,
+  methods:{
+    info_Close_Child() {
+      this.$emit("update-info-close");
+    },
+  }
+});
 
+// info藉由props 傳入資料後, 傳入的是showTableData內的[一筆資料] (showTableData[current_choosed_info])
 Vue.component("info", {
   template: `
-    <div class="info">
+    <div class="info" v-if="showTableData">
       <div class="info_content">
-        <img :src="showTableData.flag" />
+        <img v-if="showTableData.flag" :src="showTableData.flag" />
         <ul>
-          <li>- {{showTableData.name}}</li>
+          <li v-if="showTableData.name">- {{showTableData.name}}</li>
           <br />
-          <li>
+          <li v-if="showTableData.alpha2Code">
             2位國家代碼 : {{showTableData.alpha2Code}}
           </li>
-          <li>
+          <li v-if="showTableData.alpha3Code">
             3位國家代碼 : {{showTableData.alpha3Code}}
           </li>
-          <li>
+          <li v-if="showTableData.nativeName">
             母語名稱 : {{showTableData.nativeName}}
           </li>
-          <li>
+          <li v-if="showTableData.altSpellings">
             替代國家名稱 :
             {{showTableData.altSpellings}}
           </li>
-          <li>
+          <li v-if="showTableData.callingCodes">
             國際電話區號 :
             {{showTableData.callingCodes}}
           </li>
@@ -123,14 +131,15 @@ Vue.component("info", {
 
 Vue.component('content-data', {
   template: `
-    <li @click="info_Open">
-      <img :src="showTableData.flag" />
+    <li>
+      <img :src="showTableData.flag" @click="info_Open_Child"/>
     </li>
   `,
   props: ["show-table-data"],
   methods:{
-    info_Open() {
-      console.log('aaa') 
+    info_Open_Child() {
+      // console.log('abc')
+      this.$emit("update-info-open");
     },
   }
 });
@@ -177,7 +186,6 @@ const app = new Vue({
     tableData: 1,
     pageSize: 25,
     currentPage: 1,
-    // searchedCountriesNum: 1,
   },
   methods: {
     info_Open(index) {
@@ -196,7 +204,7 @@ const app = new Vue({
       }
     },
     nextPage() {
-      console.log("next");
+      // console.log("next");
       //   this.currentPage +=
       //     1 && this.currentPage < this.searchedCountries / this.pageSize;
       if (this.currentPage === this.maxPage()) {
@@ -262,12 +270,12 @@ const app = new Vue({
 
       // console.log('長度',this.currentPage - 1 );
       // console.log('顯示筆數', this.pageSize);
-      //  console.log(this.orderedCountries.length);
+      // console.log(this.orderedCountries.length);
 
       //   if (this.currentPage > this.maxPage()){
       //     this.currentPag = 1
       //   }
-      //   判斷search的時候 分頁的狀態, 此處已用 keyup 的 reset替代寫了
+      //   判斷search的分頁的狀態, 此處已用 keyup 的 reset替代寫了
 
       const start = (this.currentPage - 1) * this.pageSize;
       const end = this.currentPage * this.pageSize;
