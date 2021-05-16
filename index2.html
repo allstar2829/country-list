@@ -34,12 +34,14 @@
 
   <body>
     <div id="app">
-      <main-nav @update-text="getString"></main-nav>
+
+      <!-- 上方bar -->
+      <main-nav @update-text="getString" @update-current-page="reset"></main-nav>
 
       <!-- <card :parent-msg="maxPage()"></card>
-      <card :parent-msg="showTableData[0]"></card>
-      <card :parent-msg="pageSize"></card>
-      <card v-for="(item,index) in showTableData" :parent-msg="item.flag"></card> -->
+      <card :parent-msg="showTableData.length"></card>
+      <card :parent-msg="pageSize"></card> -->
+      <!-- <card v-for="(item,index) in showTableData" :parent-msg="item.flag"></card> -->
 
       <main>
         
@@ -74,12 +76,8 @@
         <info v-if="showTableData[current_choosed_info]" :show-table-data="showTableData[current_choosed_info]"></info>
       </transition>
 
-      <!-- <pagination></pagination> -->
-      <!-- <div class="pagination">
-        <i class="fa fa-caret-left" @click="previousPage"></i>
-        {{currentPage}} / {{maxPage()}}
-        <i class="fa fa-caret-right" @click="nextPage"></i>
-      </div> -->
+      <!-- 分頁 -->
+      <pagination :max-page="maxPage()" :current-page="currentPage" @previous-page-child="previousPage" @next-page-child="nextPage"></pagination>
     </div>
 
     <script src="main.js"></script>

@@ -19,13 +19,18 @@
 // 4. 也執行父層函式 > @sendToParent="sendMeg"
 // 四個步驟缺一不可><! 別忘
 
+// 寫法 > $emit('自定義動作',要回傳的參數)
+// this.$emit('previousPage_child',this.currentPage_child)
+// vue內記得要加 this. 
+
 Vue.component('main-nav', {
   template: `
     <div class="topBar">
       <h1>COUNTRY LIST</h1>
-      <search-bar @update-text="getChildText"></search-bar>
+      <search-bar @update-text="getChildText" @update-current-page="getCurrentPage"></search-bar>
     </div>
   `,
+  props:["current-page-parent"],
   methods:{
     getChildText(searchText){
       // return searchText
@@ -34,7 +39,11 @@ Vue.component('main-nav', {
       // 直接再把searchText 傳出去
       // <main-nav> 接值 @update-text後, 執行"getString" 
     },
-  }
+    getCurrentPage(currentPage){
+      this.$emit("update-current-page", currentPage);
+      // console.log(currentPage)
+    },
+  },
 });
 
 
@@ -43,21 +52,31 @@ Vue.component('main-nav', {
 Vue.component('search-bar', {
   template: `
     <div class="searchBar">
-      <input type="text" v-model="searchString" @input="sendToParent" placeholder="S E A R C H" />
+      <input type="text" placeholder="S E A R C H" @keyup="currentPageChildChange"
+      v-model="searchString" @input="sendToParent" />
       <i class="fa fa-search" aria-hidden="true"></i>
     </div>
   `,
   data() {
     return {
-      searchString: ""
+      searchString: "",
+      currentPageChild: 1,
     }
   },
   methods:{
     sendToParent() {
       if(this.searchString !== ""){
         this.$emit("update-text", this.searchString)
+      } else{
+        this.$emit("update-text", this.searchString = "")
+        // console.log(this.searchString = '')
+
       }
-    }
+    },
+    currentPageChildChange() {
+      // console.log(this.currentPageChild)
+      this.$emit("update-current-page", this.currentPageChild)
+    },
   }
 });
 
@@ -95,7 +114,7 @@ Vue.component('info-bg', {
   }
 });
 
-// info藉由props 傳入資料後, 傳入的是showTableData內的[一筆資料] (showTableData[current_choosed_info])
+// info藉由props 傳入資料後, 傳入的是showTableData內的[一筆資料] (showTableData[current_choosed_info]) 有點類似item的概念, 所以獲取的資料就是 showTableData.屬性
 Vue.component("info", {
   template: `
     <div class="info" v-if="showTableData">
@@ -144,33 +163,26 @@ Vue.component('content-data', {
   }
 });
 
-// Vue.component('pagination', {
-//   template: `
-//     <div class="pagination">
-//       <i class="fa fa-caret-left" @click="previousPage"></i>
-//       {{currentPage}} / {{maxPage()}}
-//       <i class="fa fa-caret-right" @click="nextPage"></i>
-//     </div>
-//   `,
-//   methods:{
-//     previousPage() {
-//       // console.log("pre");
-//       if (this.currentPage > 1) {
-//         this.currentPage -= 1;
-//       }
-//     },
-//     nextPage() {
-//       // console.log("next");
-//       //   this.currentPage +=
-//       //     1 && this.currentPage < this.searchedCountries / this.pageSize;
-//       if (this.currentPage === this.maxPage()) {
-//         return false;
-//       } else {
-//         this.currentPage += 1;
-//       }
-//     },
-//   }
-// });
+Vue.component('pagination', {
+  template: `
+    <div class="pagination">
+      <i class="fa fa-caret-left" @click="previousPage_child"></i>
+      {{currentPage}} / {{maxPage}}
+      <i class="fa fa-caret-right" @click="nextPage_child"></i>
+    </div>
+  `,
+  props: ["max-page","current-page"],
+  methods:{
+    previousPage_child() {
+      // console.log("pre");
+      this.$emit('previous-page-child')
+    },
+    nextPage_child() {
+      // console.log("next");
+      this.$emit('next-page-child')
+    },
+  }
+});
 
 
 const app = new Vue({
@@ -229,8 +241,8 @@ const app = new Vue({
       // console.log(maxPage)
       return maxPage;
     },
-    reset() {
-      this.currentPage = 1;
+    reset(page) {
+      this.currentPage = page;
     },
     getString(string){
       // console.log(string)
