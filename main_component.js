@@ -12,7 +12,7 @@
 //   }
 // });
 
-// emit > 邏輯順序可以簡單想成: 
+// emit > 邏輯順序可以簡單想成:
 // 1. 子層執行一件事情 > ex: @click/ @input
 // 2. 執行後啟動函式 > @click = "sendToParent"
 // 3. 父層html 如<div></div> 接住 @sendToParent 後
@@ -21,25 +21,25 @@
 
 // 寫法 > $emit('自定義動作',要回傳的參數)
 // this.$emit('previousPage_child',this.currentPage_child)
-// vue內記得要加 this. 
+// vue內記得要加 this.
 
-Vue.component('main-nav', {
+Vue.component("main-nav", {
   template: `
-    <div class="topBar">
-      <h1>COUNTRY LIST</h1>
-      <search-bar @update-text="getChildText" @update-current-page="getCurrentPage"></search-bar>
-    </div>
-  `,
-  props:["current-page-parent"],
-  methods:{
-    getChildText(searchText){
+      <div class="topBar">
+        <h1>COUNTRY LIST</h1>
+        <search-bar @update-text="getChildText" @update-current-page="getCurrentPage"></search-bar>
+      </div>
+    `,
+  props: ["current-page-parent"],
+  methods: {
+    getChildText(searchText) {
       // return searchText
       // 確定有得到search-bar 傳回值
       this.$emit("update-text", searchText);
       // 直接再把searchText 傳出去
-      // <main-nav> 接值 @update-text後, 執行"getString" 
+      // <main-nav> 接值 @update-text後, 執行"getString"
     },
-    getCurrentPage(currentPage){
+    getCurrentPage(currentPage) {
       this.$emit("update-current-page", currentPage);
       // console.log(currentPage)
     },
@@ -48,138 +48,136 @@ Vue.component('main-nav', {
 
 // 組件內的data 必為函式, 如此重複使用組件才不會影醒彼此的值
 // 詳見語昕影片
-Vue.component('search-bar', {
+Vue.component("search-bar", {
   template: `
-    <div class="searchBar">
-      <input type="text" placeholder="S E A R C H" @keyup="currentPageChildChange"
-      v-model="searchString" @input="sendToParent" />
-      <i class="fa fa-search" aria-hidden="true"></i>
-    </div>
-  `,
+      <div class="searchBar">
+        <input type="text" placeholder="S E A R C H" @keyup="currentPageChildChange"
+        v-model="searchString" @input="sendToParent" />
+        <i class="fa fa-search" aria-hidden="true"></i>
+      </div>
+    `,
   data() {
     return {
       searchString: "",
       currentPageChild: 1,
-    }
+    };
   },
-  methods:{
+  methods: {
     sendToParent() {
-      if(this.searchString !== ""){
-        this.$emit("update-text", this.searchString)
-      } else{
-        this.$emit("update-text", this.searchString = "")
+      if (this.searchString !== "") {
+        this.$emit("update-text", this.searchString);
+      } else {
+        this.$emit("update-text", (this.searchString = ""));
         // console.log(this.searchString = '')
-
       }
     },
     currentPageChildChange() {
       // console.log(this.currentPageChild)
-      this.$emit("update-current-page", this.currentPageChild)
+      this.$emit("update-current-page", this.currentPageChild);
     },
-  }
+  },
 });
 
-Vue.component('order-btn', {
+Vue.component("order-btn", {
   template: `
-    <div class="orderBtn" @click="changeChildOrder">
-      <i class="fa fa-list" aria-hidden="true"></i>
-    </div>`
-  ,
-  data(){
-    return{
-      isChildReverse: false
-    }
+      <div class="orderBtn" @click="changeChildOrder">
+        <i class="fa fa-list" aria-hidden="true"></i>
+      </div>`,
+  data() {
+    return {
+      isChildReverse: false,
+    };
   },
-  methods:{
+  methods: {
     changeChildOrder() {
-      this.$emit("update-order",this.isChildReverse);
+      this.$emit("update-order", this.isChildReverse);
       // console.log(this.isChildReverse);
     },
-  }
+  },
 });
 
 // 對比info, info-bg沒有引用父層資料 props: ['show-table-data'], 所以若 有加v-if =showTableData, 就會報錯 !
-Vue.component('info-bg', {
+Vue.component("info-bg", {
   template: `
-    <div
-      class="infoBg"
-      @click="info_Close_Child"
-    ></div>
-    `,
-  methods:{
+      <div
+        class="infoBg"
+        @click="info_Close_Child"
+      ></div>
+      `,
+  methods: {
     info_Close_Child() {
       this.$emit("update-info-close");
     },
-  }
+  },
 });
 
 // info藉由props 傳入資料後, 傳入的是showTableData內的[一筆資料] (showTableData[current_choosed_info]) 有點類似item的概念, 所以獲取的資料就是 showTableData.屬性
 Vue.component("info", {
   template: `
-    <div class="info" v-if="showTableData">
-      <div class="info_content">
-        <img v-if="showTableData.flag" :src="showTableData.flag" />
-        <ul>
-          <li v-if="showTableData.name">- {{showTableData.name}}</li>
-          <br />
-          <li v-if="showTableData.alpha2Code">
-            2位國家代碼 : {{showTableData.alpha2Code}}
-          </li>
-          <li v-if="showTableData.alpha3Code">
-            3位國家代碼 : {{showTableData.alpha3Code}}
-          </li>
-          <li v-if="showTableData.nativeName">
-            母語名稱 : {{showTableData.nativeName}}
-          </li>
-          <li v-if="showTableData.altSpellings">
-            替代國家名稱 :
-            {{showTableData.altSpellings}}
-          </li>
-          <li v-if="showTableData.callingCodes">
-            國際電話區號 :
-            {{showTableData.callingCodes}}
-          </li>
-        </ul>
+      <div class="info" v-if="showTableData">
+        <div class="info_content">
+          <img v-if="showTableData.flag" :src="showTableData.flag" />
+          <ul>
+            <li v-if="showTableData.name">- {{showTableData.name}}</li>
+            <br />
+            <li v-if="showTableData.alpha2Code">
+              2位國家代碼 : {{showTableData.alpha2Code}}
+            </li>
+            <li v-if="showTableData.alpha3Code">
+              3位國家代碼 : {{showTableData.alpha3Code}}
+            </li>
+            <li v-if="showTableData.nativeName">
+              母語名稱 : {{showTableData.nativeName}}
+            </li>
+            <li v-if="showTableData.altSpellings">
+              替代國家名稱 :
+              {{showTableData.altSpellings}}
+            </li>
+            <li v-if="showTableData.callingCodes">
+              國際電話區號 :
+              {{showTableData.callingCodes}}
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-    `,
-  props: ['show-table-data'],
+      `,
+  props: ["show-table-data"],
 });
 
-Vue.component('content-data', {
+Vue.component("content-data", {
   template: `
-    <li>
-      <img :src="showTableData.flag" @click="info_Open_Child"/>
-    </li>
-  `,
+      <li>
+        <img :src="showTableData.flag" @click="info_Open_Child"/>
+      </li>
+    `,
   props: ["show-table-data"],
-  methods:{
+  methods: {
     info_Open_Child() {
       // console.log('abc')
       this.$emit("update-info-open");
     },
-  }
+  },
 });
 
-Vue.component('pagination', {
+Vue.component("pagination", {
   template: `
-    <div class="pagination">
-      <i class="fa fa-caret-left" @click="previousPage_child"></i>
-      {{currentPage}} / {{maxPage}}
-      <i class="fa fa-caret-right" @click="nextPage_child"></i>
-    </div>
-  `,
-  props: ["max-page","current-page"],
-  methods:{
+      <div class="pagination">
+        <i class="fa fa-caret-left" @click="previousPage_child"></i>
+        {{currentPage}} / {{maxPage}}
+        <i class="fa fa-caret-right" @click="nextPage_child"></i>
+      </div>
+    `,
+  props: ["max-page", "current-page"],
+  methods: {
     previousPage_child() {
       // console.log("pre");
-      this.$emit('previous-page-child')
+      this.$emit("previous-page-child");
     },
     nextPage_child() {
       // console.log("next");
-      this.$emit('next-page-child')
+      this.$emit("next-page-child");
     },
-  }
+  },
 });
 
 const app = new Vue({
@@ -241,11 +239,11 @@ const app = new Vue({
     reset(page) {
       this.currentPage = page;
     },
-    getString(string){
+    getString(string) {
       // console.log(string)
-      this.isSearch = string
+      this.isSearch = string;
       // console.log(this.isSearch)
-    }
+    },
   },
   computed: {
     searchedCountries() {
