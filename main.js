@@ -46,7 +46,6 @@ Vue.component('main-nav', {
   },
 });
 
-
 // 組件內的data 必為函式, 如此重複使用組件才不會影醒彼此的值
 // 詳見語昕影片
 Vue.component('search-bar', {
@@ -147,7 +146,6 @@ Vue.component("info", {
   props: ['show-table-data'],
 });
 
-
 Vue.component('content-data', {
   template: `
     <li>
@@ -183,7 +181,6 @@ Vue.component('pagination', {
     },
   }
 });
-
 
 const app = new Vue({
   el: "#app",
