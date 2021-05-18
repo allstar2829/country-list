@@ -8,7 +8,7 @@
           <order-btn @update-order="changeOrder"></order-btn>
         </div>
 
-        {{$store.state.pageSize}}
+        <!-- {{$store.state.pageSize}} -->
         
       <div class="content">
         <ul>
@@ -52,11 +52,13 @@ export default {
   },
   methods: {
     info_Open(index) {
-      this.$store.state.current_choosed_info = index;
+      // this.$store.state.current_choosed_info = index;
+      this.$store.commit('chooseInfo',index)
     },
-    info_Close() {
-      this.$store.state.current_choosed_info = null;
-    },
+    // info_Close() {
+    //   // this.$store.state.current_choosed_info = null;
+    //   this.$store.commit('chooseInfoClose')
+    // },
     changeOrder() {
       this.$store.state.isReverse = !this.$store.state.isReverse;
     },
@@ -81,7 +83,7 @@ export default {
       this.$store.state.currentPage = page;
     },
     getString(string){
-      this.$store.state.isSearch = string
+      // this.$store.state.isSearch = string
     }
   },
   computed: {
@@ -127,11 +129,12 @@ export default {
     // this.$store.commit('changePageSize',100)
     //                    ( 沒傳值 )
     // this.$store.commit('resetCountries')
-    this.$store.commit('chooseInfo',null)
-    this.$store.commit('reverseOrder',false)
-    this.$store.commit('isSearch')
-    this.$store.commit('getPageSize',25)
-    this.$store.commit('currentPage',1)
+
+    this.$store.commit('chooseInfo')
+    this.$store.commit('reverseOrder')
+    this.$store.commit('searchString')
+    this.$store.commit('getPageSize')
+    this.$store.commit('currentPage')
 
     axios.get(`https://restcountries.eu/rest/v2/all`).then((response) => {
       

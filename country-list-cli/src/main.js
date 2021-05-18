@@ -12,7 +12,7 @@ const store = new Vuex.Store({
     isReverse: false,
     isSearch: "",
     tableData: 1,
-    pageSize: 50,
+    pageSize: 1,
     currentPage: 1
   },
   mutations: {
@@ -32,20 +32,23 @@ const store = new Vuex.Store({
       // 讓state的allcountries 值變更
       state.tableData = tableData;
     },
-    chooseInfo(state,choosedOrNot){
-      state.current_choosed_info = choosedOrNot;
+    chooseInfo(state){
+      state.current_choosed_info = null;
     },
-    reverseOrder(state,reverse){
-      state.isReverse = reverse;
+    // chooseInfoClose(state){
+    //   state.current_choosed_info = null;
+    // },
+    reverseOrder(state){
+      state.isReverse = false;
     },
-    isSearch(state){
-      state.isSearch = isSearch;
+    searchString(state){
+      state.isSearch = "";
     },
-    getPageSize(state, size) {
-      state.pageSize = size;
+    getPageSize(state) {
+      state.pageSize = 25;
     },
-    currentPage(state, nowPage) {
-      state.currentPage = nowPage;
+    currentPage(state) {
+      state.currentPage = 1;
     },
   }
 });
