@@ -1,3 +1,37 @@
+<template>
+  <div id="app">
+
+    <main-nav @update-text="getString" @update-current-page="reset"></main-nav>
+    <main>
+      <div class="intro">
+          <p>Get information about countries via a RESTful API</p>
+          <order-btn @update-order="changeOrder"></order-btn>
+        </div>
+
+        {{$store.state.pageSize}}
+        
+      <div class="content">
+        <ul>
+            <content-data :show-table-data="item" :key="index" v-for="(item,index) in showTableData" @click.native="info_Open(index)"></content-data>
+          </ul>
+      </div>
+    </main>
+
+    <transition name="fade">
+      <info-bg v-if="showTableData[this.$store.state.current_choosed_info]"
+        @update-info-close="info_Close"></info-bg>
+    </transition>
+
+    <transition name="fade">
+      <info v-if="showTableData[this.$store.state.current_choosed_info]" :show-table-data="showTableData[this.$store.state.current_choosed_info]"></info>
+    </transition>
+
+    <pagination :max-page="maxPage()" :current-page="$store.state.currentPage" @previous-page-child="previousPage" @next-page-child="nextPage"></pagination>
+    
+  </div>
+
+</template>
+
 <script>
 import mainNav from './mainNav';
 import orderBtn from './orderBtn';
@@ -9,69 +43,57 @@ import pagination from './pagination';
 export default {
   name: 'app',
   components: {
-        mainNav,
-        orderBtn,
-        info,
-        infoBg,
-        contentData,
-        pagination,
-    },
-  data () {
-    return {
-      allcountries: [],
-      current_choosed_info: null,
-      isReverse: false,
-      isSearch: "",
-      tableData: 1,
-      pageSize: 25,
-      currentPage: 1,
-    }
+    mainNav,
+    orderBtn,
+    info,
+    infoBg,
+    contentData,
+    pagination,
   },
   methods: {
     info_Open(index) {
-      this.current_choosed_info = index;
+      this.$store.state.current_choosed_info = index;
     },
     info_Close() {
-      this.current_choosed_info = null;
+      this.$store.state.current_choosed_info = null;
     },
     changeOrder() {
-      this.isReverse = !this.isReverse;
+      this.$store.state.isReverse = !this.$store.state.isReverse;
     },
     previousPage() {
-      if (this.currentPage > 1) {
-        this.currentPage -= 1;
+      if (this.$store.state.currentPage > 1) {
+        this.$store.state.currentPage -= 1;
       }
     },
     nextPage() {
-      if (this.currentPage === this.maxPage()) {
+      if (this.$store.state.currentPage === this.maxPage()) {
         return false;
       } else {
-        this.currentPage += 1;
+        this.$store.state.currentPage += 1;
       }
     },
     maxPage() {
-      let result = this.searchedCountries.length / this.pageSize;
+      let result = this.searchedCountries.length / this.$store.state.pageSize;
       let maxPage = Math.ceil(result);
       return maxPage;
     },
     reset(page) {
-      this.currentPage = page;
+      this.$store.state.currentPage = page;
     },
     getString(string){
-      this.isSearch = string
-
+      this.$store.state.isSearch = string
     }
   },
   computed: {
     searchedCountries() {
-      const copiedData = this.allcountries.map((x) => x);
+      const copiedData = this.$store.state.allcountries.map((x) => x);
       let searchedCountriesNum = [];
 
-      if (this.isSearch) {
+      if (this.$store.state.isSearch) {
         searchedCountriesNum = copiedData.filter((country) => {
           return country.name
             .toLowerCase()
-            .includes(this.isSearch.toLowerCase());
+            .includes(this.$store.state.toLowerCase());
         });
       } else {
         return copiedData;
@@ -82,7 +104,7 @@ export default {
     orderedCountries() {
       const copiedData = this.searchedCountries.map((x) => x);
 
-      if (this.isReverse) {
+      if (this.$store.state.isReverse) {
         return copiedData.reverse();
       } else {
         return copiedData;
@@ -91,54 +113,38 @@ export default {
 
     showTableData() {
       const copiedData = this.orderedCountries.map((x) => x);
-      const start = (this.currentPage - 1) * this.pageSize;
-      const end = this.currentPage * this.pageSize;
+      const start = (this.$store.state.currentPage - 1) * this.$store.state.pageSize;
+      const end = this.$store.state.currentPage * this.$store.state.pageSize;
 
       return copiedData.slice(start, end);
     },
   },
   mounted() {
-    axios.get(`https://restcountries.eu/rest/v2/all`).then((response) => {
-      this.allcountries = response.data.map((element) => element);
+    // 以pageSize 為例:
+    // 在data內 
+    // this.pageSize = 100
+    // 執行changePageSize 將store的pageSize改掉 (有傳值)
+    // this.$store.commit('changePageSize',100)
+    //                    ( 沒傳值 )
+    // this.$store.commit('resetCountries')
+    this.$store.commit('chooseInfo',null)
+    this.$store.commit('reverseOrder',false)
+    this.$store.commit('isSearch')
+    this.$store.commit('getPageSize',25)
+    this.$store.commit('currentPage',1)
 
-      this.tableData = this.allcountries.length;
+    axios.get(`https://restcountries.eu/rest/v2/all`).then((response) => {
+      
+      const data = response.data.map((element) => element)
+      this.$store.commit('getCountries', data)
+
+      const tableData = this.$store.state.allcountries.length;
+      this.$store.commit('getTableData', tableData)
     });
   },
 }
 </script>
 
-<template>
-  <div id="app">
-
-    <main-nav @update-text="getString" @update-current-page="reset"></main-nav>
-
-    <main>
-      <div class="intro">
-          <p>Get information about countries via a RESTful API</p>
-          <order-btn @update-order="changeOrder"></order-btn>
-        </div>
-        
-      <div class="content">
-        <ul>
-            <content-data :show-table-data="item" :key="index" v-for="(item,index) in showTableData" @click.native="info_Open(index)"></content-data>
-          </ul>
-      </div>
-    </main>
-
-    <transition name="fade">
-      <info-bg v-if="showTableData[current_choosed_info]"
-        @update-info-close="info_Close"></info-bg>
-    </transition>
-
-    <transition name="fade">
-      <info v-if="showTableData[current_choosed_info]" :show-table-data="showTableData[current_choosed_info]"></info>
-    </transition>
-
-    <pagination :max-page="maxPage()" :current-page="currentPage" @previous-page-child="previousPage" @next-page-child="nextPage"></pagination>
-    
-  </div>
-
-</template>
 
 <style>
 
