@@ -6,45 +6,46 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   // global store
   state: {
-    allcountries: [],
-    current_choosed_info: null,
+    allCountries: [],
+    currentChoosedInfo: null,
     isReverse: false,
     isSearch: "",
     tableData: 1,
     pageSize: 25,
     currentPage: 1,
-    maxPage:1
+    maxPage: 1
   },
   mutations: {
     getCountries(state, country) {
-      state.allcountries = country;
+      state.allCountries = country;
       // console.log(country) 有接到陣列 含250筆資料
-      // console.log(country[0].flag) 
+      // console.log(country[0].flag)
     },
-    getTableData(state, tableData) {
-      state.tableData = tableData;
-    },
-    changeOrder(state){
+    changeOrder(state) {
       state.isReverse = !state.isReverse;
     },
-    searchString(state){
+    searchString(state) {
       state.isSearch = "";
     },
-    maxPage(state, page){
-      state.maxPage = page
+    maxPage(state) {
+      let result = state.allCountries.length / state.pageSize;
+      let maxPage = Math.ceil(result);
+
+      state.maxPage = maxPage;
+      console.log(maxPage);
     },
-    previousPage(state){
+    previousPage(state) {
       if (state.state.currentPage > 1) {
         state.state.currentPage -= 1;
       }
     },
-    nextPage(){
-      if (state.state.currentPage === 10 ) {
+    nextPage() {
+      if (state.state.currentPage === 10) {
         return false;
       } else {
         state.state.currentPage += 1;
       }
-    },
+    }
   }
 });
 

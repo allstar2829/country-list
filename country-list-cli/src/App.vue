@@ -8,7 +8,7 @@
           <p>Get information about countries via a RESTful API</p>
           <order-btn @click.native="changeOrder"></order-btn>
         </div>
-        
+
       <div class="content">
         <ul>
             <content-data v-for="(item,index) in showTableData" :key="index" :show-table-data="item" @click.native="info_Open(index)"></content-data>
@@ -18,14 +18,17 @@
 
     <transition name="fade">
       <info-bg 
-        v-if="showTableData[this.$store.state.current_choosed_info]"
+        v-if="showTableData[this.$store.state.currentChoosedInfo
+]"
         @click.native="info_Close"></info-bg>
     </transition>
 
     <transition name="fade">
       <info 
-        v-if="showTableData[this.$store.state.current_choosed_info]" 
-        :show-table-data="showTableData[this.$store.state.current_choosed_info]"></info>
+        v-if="showTableData[this.$store.state.currentChoosedInfo
+]" 
+        :show-table-data="showTableData[this.$store.state.currentChoosedInfo
+]"></info>
     </transition>
 
     <pagination></pagination>
@@ -53,10 +56,12 @@ export default {
   },
   methods: {
     info_Open(index) {
-      this.$store.state.current_choosed_info = index;
+      this.$store.state.currentChoosedInfo
+ = index;
     },
     info_Close() {
-      this.$store.state.current_choosed_info = null;
+      this.$store.state.currentChoosedInfo
+ = null;
     },
     changeOrder() {
       this.$store.commit('changeOrder');
@@ -73,7 +78,8 @@ export default {
   },
   computed: {
     searchedCountries() {
-      const copiedData = this.$store.state.allcountries.map((x) => x);
+      const copiedData = this.$store.state.allCountries
+.map((x) => x);
       let searchedCountriesNum = [];
 
       if (this.$store.state.isSearch) {
@@ -106,27 +112,12 @@ export default {
 
       return copiedData.slice(start, end);
     },
-
-    maxPage() {
-      let result = this.showTableData.length / this.$store.state.pageSize;
-      console.log(this.showTableData.length)
-      console.log(result)
-      let maxPage = Math.ceil(result);
-      console.log(maxPage)
-
-      this.$store.commit('maxPage', maxPage);
-      // return maxPage;
-    },
-
   },
   mounted() {
     axios.get(`https://restcountries.eu/rest/v2/all`).then((response) => {
       
       const data = response.data.map((element) => element)
       this.$store.commit('getCountries', data)
-
-      const tableData = this.$store.state.allcountries.length;
-      this.$store.commit('getTableData', tableData)
     });
   },
 }

@@ -1,8 +1,8 @@
 new Vue({
   el: "#app",
   data: {
-    allcountries: [],
-    current_choosed_info: null,
+    allCountries: [],
+    currentChoosedInfo: null,
     isReverse: false,
     isSearch: "",
     tableData: 1,
@@ -12,10 +12,10 @@ new Vue({
   },
   methods: {
     info_Open(index) {
-      this.current_choosed_info = index;
+      this.currentChoosedInfo = index;
     },
     info_Close() {
-      this.current_choosed_info = null;
+      this.currentChoosedInfo = null;
     },
     changeOrder() {
       this.isReverse = !this.isReverse;
@@ -58,7 +58,7 @@ new Vue({
   },
   computed: {
     searchedCountries() {
-      const copiedData = this.allcountries.map((x) => x);
+      const copiedData = this.allCountries.map((x) => x);
       let searchedCountriesNum = [];
 
       if (this.isSearch) {
@@ -103,9 +103,9 @@ new Vue({
     // this.testFunction();
 
     axios.get(`https://restcountries.eu/rest/v2/all`).then((response) => {
-      this.allcountries = response.data.map((element) => element);
+      this.allCountries = response.data.map((element) => element);
 
-      this.tableData = this.allcountries.length;
+      this.tableData = this.allCountries.length;
     });
   },
 });

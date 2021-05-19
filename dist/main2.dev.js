@@ -82,7 +82,8 @@ Vue.component("info-bg", {
       this.$emit("update-info-close");
     }
   }
-}); // info藉由props 傳入資料後, 傳入的是showTableData內的[一筆資料] (showTableData[current_choosed_info]) 有點類似item的概念, 所以獲取的資料就是 showTableData.屬性
+}); // info藉由props 傳入資料後, 傳入的是showTableData內的[一筆資料] (showTableData[currentChoosedInfo
+]) 有點類似item的概念, 所以獲取的資料就是 showTableData.屬性
 
 Vue.component("info", {
   template: "\n      <div class=\"info\" v-if=\"showTableData\">\n        <div class=\"info_content\">\n          <img v-if=\"showTableData.flag\" :src=\"showTableData.flag\" />\n          <ul>\n            <li v-if=\"showTableData.name\">- {{showTableData.name}}</li>\n            <br />\n            <li v-if=\"showTableData.alpha2Code\">\n              2\u4F4D\u570B\u5BB6\u4EE3\u78BC : {{showTableData.alpha2Code}}\n            </li>\n            <li v-if=\"showTableData.alpha3Code\">\n              3\u4F4D\u570B\u5BB6\u4EE3\u78BC : {{showTableData.alpha3Code}}\n            </li>\n            <li v-if=\"showTableData.nativeName\">\n              \u6BCD\u8A9E\u540D\u7A31 : {{showTableData.nativeName}}\n            </li>\n            <li v-if=\"showTableData.altSpellings\">\n              \u66FF\u4EE3\u570B\u5BB6\u540D\u7A31 :\n              {{showTableData.altSpellings}}\n            </li>\n            <li v-if=\"showTableData.callingCodes\">\n              \u570B\u969B\u96FB\u8A71\u5340\u865F :\n              {{showTableData.callingCodes}}\n            </li>\n          </ul>\n        </div>\n      </div>\n      ",
@@ -118,8 +119,10 @@ var app = new Vue({
   //   card
   // },
   data: {
-    allcountries: [],
-    current_choosed_info: null,
+    allCountries
+: [],
+    currentChoosedInfo
+: null,
     isReverse: false,
     isSearch: "",
     tableData: 1,
@@ -128,10 +131,12 @@ var app = new Vue({
   },
   methods: {
     info_Open: function info_Open(index) {
-      this.current_choosed_info = index;
+      this.currentChoosedInfo
+ = index;
     },
     info_Close: function info_Close() {
-      this.current_choosed_info = null;
+      this.currentChoosedInfo
+ = null;
     },
     changeOrder: function changeOrder() {
       this.isReverse = !this.isReverse;
@@ -180,7 +185,8 @@ var app = new Vue({
     searchedCountries: function searchedCountries() {
       var _this = this;
 
-      var copiedData = this.allcountries.map(function (x) {
+      var copiedData = this.allCountries
+.map(function (x) {
         return x;
       });
       var searchedCountriesNum = [];
@@ -228,10 +234,12 @@ var app = new Vue({
 
     // this.testFunction();
     axios.get("https://restcountries.eu/rest/v2/all").then(function (response) {
-      _this2.allcountries = response.data.map(function (element) {
+      _this2.allCountries
+ = response.data.map(function (element) {
         return element;
       });
-      _this2.tableData = _this2.allcountries.length;
+      _this2.tableData = _this2.allCountries
+.length;
     });
   }
 });

@@ -111,7 +111,8 @@ Vue.component("info-bg", {
   },
 });
 
-// info藉由props 傳入資料後, 傳入的是showTableData內的[一筆資料] (showTableData[current_choosed_info]) 有點類似item的概念, 所以獲取的資料就是 showTableData.屬性
+// info藉由props 傳入資料後, 傳入的是showTableData內的[一筆資料] (showTableData[currentChoosedInfo
+]) 有點類似item的概念, 所以獲取的資料就是 showTableData.屬性
 Vue.component("info", {
   template: `
       <div class="info" v-if="showTableData">
@@ -186,8 +187,10 @@ const app = new Vue({
   //   card
   // },
   data: {
-    allcountries: [],
-    current_choosed_info: null,
+    allCountries
+: [],
+    currentChoosedInfo
+: null,
     isReverse: false,
     isSearch: "",
     tableData: 1,
@@ -196,10 +199,12 @@ const app = new Vue({
   },
   methods: {
     info_Open(index) {
-      this.current_choosed_info = index;
+      this.currentChoosedInfo
+ = index;
     },
     info_Close() {
-      this.current_choosed_info = null;
+      this.currentChoosedInfo
+ = null;
     },
     changeOrder() {
       this.isReverse = !this.isReverse;
@@ -247,7 +252,8 @@ const app = new Vue({
   },
   computed: {
     searchedCountries() {
-      const copiedData = this.allcountries.map((x) => x);
+      const copiedData = this.allCountries
+.map((x) => x);
       let searchedCountriesNum = [];
 
       if (this.isSearch) {
@@ -296,9 +302,11 @@ const app = new Vue({
     // this.testFunction();
 
     axios.get(`https://restcountries.eu/rest/v2/all`).then((response) => {
-      this.allcountries = response.data.map((element) => element);
+      this.allCountries
+ = response.data.map((element) => element);
 
-      this.tableData = this.allcountries.length;
+      this.tableData = this.allCountries
+.length;
     });
   },
 });

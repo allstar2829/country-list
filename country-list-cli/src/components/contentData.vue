@@ -1,7 +1,8 @@
 <template>
     <li>
         <img :src="showTableData.flag"/>
-        <!-- {{$store.state.allcountries[0].name}}  -->
+        <!-- {{$store.state.allCountries
+[0].name}}  -->
     </li>
 </template>
 

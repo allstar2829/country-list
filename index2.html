@@ -37,7 +37,12 @@
       <div class="topBar">
         <h1>COUNTRY LIST</h1>
         <div class="searchBar">
-          <input type="text" v-model="isSearch" placeholder="S E A R C H" @keyup="reset"/>
+          <input
+            type="text"
+            v-model="isSearch"
+            placeholder="S E A R C H"
+            @keyup="reset"
+          />
           <i class="fa fa-search" aria-hidden="true"></i>
         </div>
       </div>
@@ -63,34 +68,42 @@
       <transition name="fade">
         <div
           class="infoBg"
-          v-if="current_choosed_info !== null"
+          v-if="currentChoosedInfo
+ !== null"
           @click="info_Close"
         ></div>
       </transition>
 
       <transition name="fade">
-        <div class="info" v-if="current_choosed_info !== null">
+        <div
+          class="info"
+          v-if="currentChoosedInfo
+ !== null"
+        >
           <div class="info_content">
-            <img :src="showTableData[current_choosed_info].flag" />
+            <img
+              :src="showTableData[currentChoosedInfo
+].flag"
+            />
             <ul>
-              <li>- {{showTableData[current_choosed_info].name}}</li>
+              <li>- {{showTableData[currentChoosedInfo ].name}}</li>
               <br />
               <li>
-                2位國家代碼 : {{showTableData[current_choosed_info].alpha2Code}}
+                2位國家代碼 : {{showTableData[currentChoosedInfo ].alpha2Code}}
               </li>
               <li>
-                3位國家代碼 : {{showTableData[current_choosed_info].alpha3Code}}
+                3位國家代碼 : {{showTableData[currentChoosedInfo ].alpha3Code}}
               </li>
               <li>
-                母語名稱 : {{showTableData[current_choosed_info].nativeName}}
+                母語名稱 : {{showTableData[currentChoosedInfo ].nativeName}}
               </li>
               <li>
-                替代國家名稱 :
-                {{showTableData[current_choosed_info].altSpellings}}
+                替代國家名稱 : {{showTableData[currentChoosedInfo
+                ].altSpellings}}
               </li>
               <li>
-                國際電話區號 :
-                {{showTableData[current_choosed_info].callingCodes}}
+                國際電話區號 : {{showTableData[currentChoosedInfo
+                ].callingCodes}}
               </li>
             </ul>
           </div>

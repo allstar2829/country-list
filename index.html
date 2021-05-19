@@ -52,7 +52,8 @@
         <div class="content">
           <ul>
             <!-- <li v-for="(item,index) in orderedCountries">
-              <img :src="item.flag" @click="current_choosed_info = index" />
+              <img :src="item.flag" @click="currentChoosedInfo
+ = index" />
             </li> -->
 
             <li v-for="(item,index) in orderedCountries">
@@ -66,36 +67,44 @@
       <transition name="fade">
         <div
           class="infoBg"
-          v-if="current_choosed_info !== null"
+          v-if="currentChoosedInfo
+ !== null"
           @click="info_Close"
         ></div>
       </transition>
 
       <transition name="fade">
-        <div class="info" v-if="current_choosed_info !== null">
+        <div
+          class="info"
+          v-if="currentChoosedInfo
+ !== null"
+        >
           <div class="info_content">
-            <img :src="orderedCountries[current_choosed_info].flag" />
+            <img
+              :src="orderedCountries[currentChoosedInfo
+].flag"
+            />
             <ul>
-              <li>- {{orderedCountries[current_choosed_info].name}}</li>
+              <li>- {{orderedCountries[currentChoosedInfo ].name}}</li>
               <br />
               <li>
-                2位國家代碼 :
-                {{orderedCountries[current_choosed_info].alpha2Code}}
+                2位國家代碼 : {{orderedCountries[currentChoosedInfo
+                ].alpha2Code}}
               </li>
               <li>
-                3位國家代碼 :
-                {{orderedCountries[current_choosed_info].alpha3Code}}
+                3位國家代碼 : {{orderedCountries[currentChoosedInfo
+                ].alpha3Code}}
               </li>
               <li>
-                母語名稱 : {{orderedCountries[current_choosed_info].nativeName}}
+                母語名稱 : {{orderedCountries[currentChoosedInfo ].nativeName}}
               </li>
               <li>
-                替代國家名稱 :
-                {{orderedCountries[current_choosed_info].altSpellings}}
+                替代國家名稱 : {{orderedCountries[currentChoosedInfo
+                ].altSpellings}}
               </li>
               <li>
-                國際電話區號 :
-                {{orderedCountries[current_choosed_info].callingCodes}}
+                國際電話區號 : {{orderedCountries[currentChoosedInfo
+                ].callingCodes}}
               </li>
             </ul>
           </div>
@@ -119,8 +128,8 @@
       new Vue({
         el: "#app",
         data: {
-          allcountries: [],
-          current_choosed_info: null,
+          allCountries: [],
+          currentChoosedInfo: null,
           isReverse: false,
           isSearch: "",
           tableData: 1,
@@ -131,10 +140,10 @@
         },
         methods: {
           info_Open(index) {
-            this.current_choosed_info = index;
+            this.currentChoosedInfo = index;
           },
           info_Close() {
-            this.current_choosed_info = null;
+            this.currentChoosedInfo = null;
           },
           changeOrder() {
             // this.isReverse = !this.isReverse
@@ -193,7 +202,7 @@
               }
               let start = (this.currentPage - 1) * this.pageSize;
               let end = this.currentPage * this.pageSize;
-              let searchedCountryData = this.allcountries.filter((country) => {
+              let searchedCountryData = this.allCountries.filter((country) => {
                 return country.name
                   .toLowerCase()
                   .includes(this.isSearch.toLowerCase());
@@ -214,16 +223,16 @@
               this.isSearch2 = true;
               return copiedData;
             } else {
-              this.tableData = this.allcountries.length; //全撈的長度
+              this.tableData = this.allCountries.length; //全撈的長度
               if (
                 this.isSearch2 &&
-                this.tableData == this.allcountries.length
+                this.tableData == this.allCountries.length
               ) {
                 this.currentPage = 1;
               }
               let start = (this.currentPage - 1) * this.pageSize;
               let end = this.currentPage * this.pageSize;
-              this.allcountries.forEach((x, index) => {
+              this.allCountries.forEach((x, index) => {
                 if (index >= start && index < end) {
                   copiedData.push(x);
                 }
@@ -272,9 +281,9 @@
 
         mounted() {
           axios.get(`https://restcountries.eu/rest/v2/all`).then((response) => {
-            this.allcountries = response.data.map((element) => element);
+            this.allCountries = response.data.map((element) => element);
 
-            this.tableData = this.allcountries.length;
+            this.tableData = this.allCountries.length;
             this.allPage = Math.ceil(this.tableData / this.pageSize);
           });
         },
