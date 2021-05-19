@@ -1,22 +1,22 @@
 <template>
-    <div class="orderBtn" @click="changeChildOrder">
+    <div class="orderBtn">
         <i class="fa fa-list" aria-hidden="true"></i>
     </div>
 </template>
 
 <script>
 export default {
-    data(){
-        return{
-        isChildReverse: false
-        }
-    },
-    methods:{
-        changeChildOrder() {
-        this.$emit("update-order",this.isChildReverse);
-        // console.log(this.isChildReverse);
-        },
-    }
+    // data(){
+    //     return{
+    //     isChildReverse: false
+    //     }
+    // },
+    // methods:{
+    //     changeChildOrder() {
+    //     this.$emit("update-order",this.isChildReverse);
+    //     // console.log(this.isChildReverse);
+    //     },
+    // }
 }
 </script>
 

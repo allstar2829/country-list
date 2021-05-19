@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>子傳父(emit)</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script>
+      let vm = new Vue({
+        //Vue instance(Vue實例)
+        el: "#app",
+        data: {
+          text: "Hello",
+        },
+        methods: {
+          getChildText(meg) {
+            this.text = meg;
+          },
+        },
+        template: `
+                <div>
+                    <input type="text" v-model="text">
+                    <child @update-text="getChildText"></child>
+                </div>
+            `,
+        components: {
+          'child': {
+            template: `
+                    <input v-model="childText" @input="sendToParent">
+                `,
+            data() {
+              return {
+                childText: "HI",
+              };
+            },
+            methods: {
+              sendToParent() {
+                this.$emit("update-text", this.childText);
+              },
+            },
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

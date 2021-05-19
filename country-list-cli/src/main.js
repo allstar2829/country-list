@@ -50,6 +50,9 @@ const store = new Vuex.Store({
     currentPage(state) {
       state.currentPage = 1;
     },
+    text(){
+      console.log(aaa)
+    }
   }
 });
 

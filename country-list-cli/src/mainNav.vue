@@ -1,7 +1,7 @@
 <template>
     <div class="topBar">
         <h1>COUNTRY LIST</h1>
-        <search-bar @update-text="getChildText" @update-current-page="getCurrentPage"></search-bar>
+        <search-bar></search-bar>
     </div>
 </template>
 
@@ -11,15 +11,6 @@ import searchBar from './searchBar';
 export default {
     components: {
         searchBar,
-    },
-    props:["current-page-parent"],
-    methods:{
-        getChildText(searchText){
-        this.$emit("update-text", searchText);
-        },
-        getCurrentPage(currentPage){
-        this.$emit("update-current-page", currentPage);
-        },
     },
 }
 </script>

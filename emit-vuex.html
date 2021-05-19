@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/3.6.2/vuex.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>子傳父(emit)</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script>
+      const store = new Vuex.Store({
+        state: {
+          message: "Hello Vuex !",
+        },
+        mutations: {
+            changeString(state,text){
+                state.message = text
+            }
+        },
+      });
+      new Vue({
+        el: "#app",
+        store,
+        // data: {
+        //   message: "Hello Vuex !",
+        // },
+        methods: {
+        },
+        template: `
+                <div>
+                    <input type="text" v-model="$store.state.message">
+                    <child></child>
+                </div>
+            `,
+        components: {
+          child: {
+            template: `
+                    <input v-model="childText" @input="changeText">
+                `,
+            data() {
+              return {
+                childText: "HI Child",
+              };
+            },
+            methods: {
+                changeText() {
+                this.$store.commit("changeString", this.childText);
+              },
+            },
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

@@ -1,11 +1,12 @@
 <template>
   <div id="app">
 
-    <main-nav @update-text="getString" @update-current-page="reset"></main-nav>
+    <main-nav></main-nav>
+
     <main>
       <div class="intro">
           <p>Get information about countries via a RESTful API</p>
-          <order-btn @update-order="changeOrder"></order-btn>
+          <order-btn @click.native="changeOrder"></order-btn>
         </div>
 
         <!-- {{$store.state.pageSize}} -->
@@ -29,7 +30,6 @@
     <pagination :max-page="maxPage()" :current-page="$store.state.currentPage" @previous-page-child="previousPage" @next-page-child="nextPage"></pagination>
     
   </div>
-
 </template>
 
 <script>
@@ -95,7 +95,7 @@ export default {
         searchedCountriesNum = copiedData.filter((country) => {
           return country.name
             .toLowerCase()
-            .includes(this.$store.state.toLowerCase());
+            .includes(this.$store.state.isSearch.toLowerCase());
         });
       } else {
         return copiedData;
@@ -115,6 +115,11 @@ export default {
 
     showTableData() {
       const copiedData = this.orderedCountries.map((x) => x);
+
+      // if (this.$store.state.currentPage > this.maxPage()){
+      //     this.$store.state.currentPag = 1
+      //   }
+
       const start = (this.$store.state.currentPage - 1) * this.$store.state.pageSize;
       const end = this.$store.state.currentPage * this.$store.state.pageSize;
 
@@ -130,11 +135,11 @@ export default {
     //                    ( 沒傳值 )
     // this.$store.commit('resetCountries')
 
-    this.$store.commit('chooseInfo')
-    this.$store.commit('reverseOrder')
-    this.$store.commit('searchString')
-    this.$store.commit('getPageSize')
-    this.$store.commit('currentPage')
+    // this.$store.commit('chooseInfo')
+    // this.$store.commit('reverseOrder')
+    // this.$store.commit('searchString')
+    // this.$store.commit('getPageSize')
+    // this.$store.commit('currentPage')
 
     axios.get(`https://restcountries.eu/rest/v2/all`).then((response) => {
       

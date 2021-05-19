@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+      integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="reset.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js"
+      integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.js"
+      integrity="sha512-Kg0CewqPNO/ziOJuCq5eyl3P/V6OLz/Lb1I2m+yKS3lHZcGVFN/KOew18rWP+kTsL7haYdaqGjwHQCZrN0heLQ=="
+      crossorigin="anonymous"
+    ></script>
+    <script></script>
+    <title>COUNTRY LIST</title>
+  </head>
+
+  <body>
+    <div id="app">
+      <div class="topBar">
+        <h1>COUNTRY LIST</h1>
+        <div class="searchBar">
+          <input type="text" v-model="isSearch" placeholder="S E A R C H" @keyup="reset"/>
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </div>
+      </div>
+
+      <main>
+        <div class="intro">
+          <p>Get information about countries via a RESTful API</p>
+          <div class="orderBtn" @click="changeOrder">
+            <i class="fa fa-list" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <div class="content">
+          <ul>
+            <li v-for="(item,index) in showTableData">
+              <img :src="item.flag" @click="info_Open(index)" />
+            </li>
+          </ul>
+        </div>
+      </main>
+
+      <!-- 資訊彈窗 -->
+      <transition name="fade">
+        <div
+          class="infoBg"
+          v-if="current_choosed_info !== null"
+          @click="info_Close"
+        ></div>
+      </transition>
+
+      <transition name="fade">
+        <div class="info" v-if="current_choosed_info !== null">
+          <div class="info_content">
+            <img :src="showTableData[current_choosed_info].flag" />
+            <ul>
+              <li>- {{showTableData[current_choosed_info].name}}</li>
+              <br />
+              <li>
+                2位國家代碼 : {{showTableData[current_choosed_info].alpha2Code}}
+              </li>
+              <li>
+                3位國家代碼 : {{showTableData[current_choosed_info].alpha3Code}}
+              </li>
+              <li>
+                母語名稱 : {{showTableData[current_choosed_info].nativeName}}
+              </li>
+              <li>
+                替代國家名稱 :
+                {{showTableData[current_choosed_info].altSpellings}}
+              </li>
+              <li>
+                國際電話區號 :
+                {{showTableData[current_choosed_info].callingCodes}}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </transition>
+
+      <div class="pagination">
+        <i class="fa fa-caret-left" @click="previousPage"></i>
+        {{currentPage}} / {{maxPage()}}
+        <i class="fa fa-caret-right" @click="nextPage"></i>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+</html>

@@ -9,7 +9,7 @@ var store = new Vuex.Store({
     isReverse: false,
     isSearch: "",
     tableData: 1,
-    pageSize: 25,
+    pageSize: 20,
     currentPage: 1
   },
   mutations: {

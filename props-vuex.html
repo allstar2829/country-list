@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/3.6.2/vuex.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>父傳子(props)</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script>
+      const store = new Vuex.Store({
+        // global store
+        state: {
+            text:'Hello Vuex'
+        },
+        mutations: {
+            addText(state,string) {
+                state.text = string;
+          },
+        },
+      });
+
+      new Vue({
+        el: "#app",
+        store,
+        data: {
+        //   text: "hello",
+        },
+        template: `
+            <div>
+                <input type="text" v-model="$store.state.text" @input="addString">
+                <child></child>
+            </div>`,
+        methods: {
+            addString(){
+                this.$store.commit('addText',words);
+            }
+        },
+        components: {
+          child: {
+            template: `
+                <p>{{$store.state.text}}</p>`,
+            computed:{
+                
+            }
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
