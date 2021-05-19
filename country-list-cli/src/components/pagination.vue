@@ -1,24 +1,24 @@
 <template>
     <div class="pagination">
-        <i class="fa fa-caret-left" @click="previousPage_child"></i>
-        {{currentPage}} / {{maxPage}}
-        <i class="fa fa-caret-right" @click="nextPage_child"></i>
+        <!-- <i class="fa fa-caret-left" @click="previousPage"></i> -->
+        {{$store.state.currentPage}} / {{$store.state.maxPage}}
+        <!-- <i class="fa fa-caret-right" @click="nextPage"></i> -->
     </div>
 </template>
 
 <script>
 export default {
-    props: ["max-page","current-page"],
-    methods:{
-        previousPage_child() {
-        // console.log("pre");
-        this.$emit('previous-page-child')
-        },
-        nextPage_child() {
-        // console.log("next");
-        this.$emit('next-page-child')
-        },
-    }
+    // props: ["max-page","current-page"],
+    // methods:{
+    //     previousPage_child() {
+    //     // console.log("pre");
+    //     this.$emit('previous-page-child')
+    //     },
+    //     nextPage_child() {
+    //     // console.log("next");
+    //     this.$emit('next-page-child')
+    //     },
+    // }
 }
 </script>
 

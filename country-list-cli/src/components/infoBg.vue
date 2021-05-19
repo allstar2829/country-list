@@ -1,22 +1,8 @@
 <template>
-    <div
-      class="infoBg"
-      @click="info_Close_Child"
-    ></div>
+    <div class="infoBg"></div>
 </template>
 
-<script>
-export default {
-    methods:{
-        info_Close_Child() {
-            this.$emit("update-info-close");
-        },
-    }
-}
-</script>
-
 <style>
-
 .infoBg{
     display: block;
     width: 100vw;
@@ -32,5 +18,4 @@ export default {
     pointer-events: auto;
     transition: .6s ease;
 }
-
 </style>

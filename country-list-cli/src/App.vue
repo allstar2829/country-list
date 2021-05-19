@@ -8,26 +8,27 @@
           <p>Get information about countries via a RESTful API</p>
           <order-btn @click.native="changeOrder"></order-btn>
         </div>
-
-        <!-- 測試 {{$store.state.pageSize}} -->
         
       <div class="content">
         <ul>
-            <content-data v-for="(item,index) in showTableData" :key="index" @click.native="info_Open(index)"></content-data>
+            <content-data v-for="(item,index) in showTableData" :key="index" :show-table-data="item" @click.native="info_Open(index)"></content-data>
           </ul>
       </div>
     </main>
 
     <transition name="fade">
-      <info-bg v-if="showTableData[this.$store.state.current_choosed_info]"
-        @update-info-close="info_Close"></info-bg>
+      <info-bg 
+        v-if="showTableData[this.$store.state.current_choosed_info]"
+        @click.native="info_Close"></info-bg>
     </transition>
 
     <transition name="fade">
-      <info v-if="showTableData[this.$store.state.current_choosed_info]" :show-table-data="showTableData[this.$store.state.current_choosed_info]"></info>
+      <info 
+        v-if="showTableData[this.$store.state.current_choosed_info]" 
+        :show-table-data="showTableData[this.$store.state.current_choosed_info]"></info>
     </transition>
 
-    <pagination :max-page="maxPage()" :current-page="$store.state.currentPage" @previous-page-child="previousPage" @next-page-child="nextPage"></pagination>
+    <pagination></pagination>
     
   </div>
 </template>
@@ -53,38 +54,22 @@ export default {
   methods: {
     info_Open(index) {
       this.$store.state.current_choosed_info = index;
-      // this.$store.commit('chooseInfo',index)
     },
-    // info_Close() {
-    //   // this.$store.state.current_choosed_info = null;
-    //   this.$store.commit('chooseInfoClose')
-    // },
+    info_Close() {
+      this.$store.state.current_choosed_info = null;
+    },
     changeOrder() {
-      this.$store.state.isReverse = !this.$store.state.isReverse;
+      this.$store.commit('changeOrder');
     },
     previousPage() {
-      if (this.$store.state.currentPage > 1) {
-        this.$store.state.currentPage -= 1;
-      }
+      this.$store.commit('previousPage');
     },
     nextPage() {
-      if (this.$store.state.currentPage === this.maxPage()) {
-        return false;
-      } else {
-        this.$store.state.currentPage += 1;
-      }
-    },
-    maxPage() {
-      let result = this.searchedCountries.length / this.$store.state.pageSize;
-      let maxPage = Math.ceil(result);
-      return maxPage;
+      this.$store.commit('nextPage');
     },
     reset(page) {
       this.$store.state.currentPage = page;
     },
-    getString(string){
-      // this.$store.state.isSearch = string
-    }
   },
   computed: {
     searchedCountries() {
@@ -116,30 +101,25 @@ export default {
     showTableData() {
       const copiedData = this.orderedCountries.map((x) => x);
 
-      // if (this.$store.state.currentPage > this.maxPage()){
-      //     this.$store.state.currentPag = 1
-      //   }
       const start = (this.$store.state.currentPage - 1) * this.$store.state.pageSize;
       const end = this.$store.state.currentPage * this.$store.state.pageSize;
 
       return copiedData.slice(start, end);
     },
+
+    maxPage() {
+      let result = this.showTableData.length / this.$store.state.pageSize;
+      console.log(this.showTableData.length)
+      console.log(result)
+      let maxPage = Math.ceil(result);
+      console.log(maxPage)
+
+      this.$store.commit('maxPage', maxPage);
+      // return maxPage;
+    },
+
   },
   mounted() {
-    // 以pageSize 為例:
-    // 在data內 
-    // this.pageSize = 100
-    // 執行changePageSize 將store的pageSize改掉 (有傳值)
-    // this.$store.commit('changePageSize',100)
-    //                    ( 沒傳值 )
-    // this.$store.commit('resetCountries')
-
-    // this.$store.commit('chooseInfo')
-    // this.$store.commit('reverseOrder')
-    // this.$store.commit('searchString')
-    // this.$store.commit('getPageSize')
-    // this.$store.commit('currentPage')
-
     axios.get(`https://restcountries.eu/rest/v2/all`).then((response) => {
       
       const data = response.data.map((element) => element)
@@ -154,7 +134,6 @@ export default {
 
 
 <style>
-
 #app {
   font-family: 'Work Sans', sans-serif;
   background-color: #fff;
@@ -178,56 +157,10 @@ main{
 .content{
     margin: 0 auto;
 }
-
 .fade-enter-active, .fade-leave-active {
     transition: opacity .5s;
 }
 .fade-enter, .fade-leave-to{
     opacity: 0;
-}
-
-/* reset */
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
-}
-body {
-	line-height: 1;
-}
-ol, ul {
-	list-style: none;
-}
-blockquote, q {
-	quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
 }
 </style>

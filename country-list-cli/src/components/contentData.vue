@@ -1,19 +1,13 @@
 <template>
     <li>
-        <!-- <img :src="this.$store.state.allcountries.flag"/> -->
-        {{this.$store.state.allcountries.name}} 
+        <img :src="showTableData.flag"/>
+        <!-- {{$store.state.allcountries[0].name}}  -->
     </li>
 </template>
 
 <script>
 export default {
-    // props: ["show-table-data"],
-    // methods:{
-    //     info_Open_Child() {
-    //     // console.log('abc')
-    //     this.$emit("update-info-open");
-    //     },
-    // }
+    props: ["show-table-data"],
 }
 </script>
 
