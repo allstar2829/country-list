@@ -1,14 +1,13 @@
 import Vue from "vue";
-import App from "./App.vue";
 import Vuex from "vuex";
-
+import App from "./App.vue";
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   // global store
   state: {
     allcountries: [],
-    current_choosed_info: null,
+    current_choosed_info: 1,
     isReverse: false,
     isSearch: "",
     tableData: 1,
@@ -23,6 +22,8 @@ const store = new Vuex.Store({
     // addCountries用變數country接收data
     getCountries(state, country) {
       state.allcountries = country;
+      // console.log(country) 有接到陣列 含250筆資料
+      console.log(country[0].flag)
     },
     // resetCountries(state) {
     //   // 或是讓state的allcountries 值清空

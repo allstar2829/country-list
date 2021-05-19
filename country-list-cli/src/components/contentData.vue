@@ -1,23 +1,23 @@
 <template>
     <li>
-        <img :src="showTableData.flag" @click="info_Open_Child"/>
+        <!-- <img :src="this.$store.state.allcountries.flag"/> -->
+        {{this.$store.state.allcountries.name}} 
     </li>
 </template>
 
 <script>
 export default {
-    props: ["show-table-data"],
-    methods:{
-        info_Open_Child() {
-        // console.log('abc')
-        this.$emit("update-info-open");
-        },
-    }
+    // props: ["show-table-data"],
+    // methods:{
+    //     info_Open_Child() {
+    //     // console.log('abc')
+    //     this.$emit("update-info-open");
+    //     },
+    // }
 }
 </script>
 
 <style>
-
 .content ul{
     display: flex;
     flex-wrap: wrap;
@@ -36,5 +36,4 @@ export default {
     height: 140px;
     display: block;
 }
-
 </style>

@@ -9,11 +9,11 @@
           <order-btn @click.native="changeOrder"></order-btn>
         </div>
 
-        <!-- {{$store.state.pageSize}} -->
+        <!-- 測試 {{$store.state.pageSize}} -->
         
       <div class="content">
         <ul>
-            <content-data :show-table-data="item" :key="index" v-for="(item,index) in showTableData" @click.native="info_Open(index)"></content-data>
+            <content-data v-for="(item,index) in showTableData" :key="index" @click.native="info_Open(index)"></content-data>
           </ul>
       </div>
     </main>
@@ -33,12 +33,12 @@
 </template>
 
 <script>
-import mainNav from './mainNav';
-import orderBtn from './orderBtn';
-import info from './info';
-import infoBg from './infoBg';
-import contentData from './contentData';
-import pagination from './pagination';
+import mainNav from './components/mainNav';
+import orderBtn from './components/orderBtn';
+import info from './components/info';
+import infoBg from './components/infoBg';
+import contentData from './components/contentData';
+import pagination from './components/pagination';
 
 export default {
   name: 'app',
@@ -52,8 +52,8 @@ export default {
   },
   methods: {
     info_Open(index) {
-      // this.$store.state.current_choosed_info = index;
-      this.$store.commit('chooseInfo',index)
+      this.$store.state.current_choosed_info = index;
+      // this.$store.commit('chooseInfo',index)
     },
     // info_Close() {
     //   // this.$store.state.current_choosed_info = null;
@@ -119,7 +119,6 @@ export default {
       // if (this.$store.state.currentPage > this.maxPage()){
       //     this.$store.state.currentPag = 1
       //   }
-
       const start = (this.$store.state.currentPage - 1) * this.$store.state.pageSize;
       const end = this.$store.state.currentPage * this.$store.state.pageSize;
 
