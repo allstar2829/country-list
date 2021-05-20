@@ -33,7 +33,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
 .info{
     width: 700px;
@@ -51,7 +51,7 @@ export default {
     box-shadow: 1px 1px 4px rgb(92, 92, 92);
     z-index: 2;
 
-    opacity: 1;
+    /* opacity: 1; */
     pointer-events: auto;
     transition: .6s ease;
 }
