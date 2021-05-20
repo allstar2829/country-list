@@ -1,7 +1,7 @@
 <template>
     <div class="searchBar">
-        <input type="text" placeholder="S E A R C H"
-        v-model="$store.state.isSearch"/>
+        <input type="text" placeholder="S E A R C H" @keyup="reset"
+        v-model="$store.state.isSearch" />
         <i class="fa fa-search" aria-hidden="true"></i>
     </div>
 </template>
@@ -15,19 +15,11 @@ export default {
     //     currentPageChild: 1,
     //     }
     // },
-    // methods:{
-    //     sendToParent() {
-    //     if(this.searchString !== ""){
-    //         this.$emit("update-text", this.searchString)
-    //     } else{
-    //         // console.log(this.searchString = '')
-    //         this.$emit("update-text", this.searchString = "")}
-    //     },
-    //     currentPageChildChange() {
-    //     // console.log(this.currentPageChild)
-    //     this.$emit("update-current-page", this.currentPageChild)
-    //     },
-    // }
+    methods:{
+        reset(){
+            this.$store.commit('reset');
+        }
+    }
 }
 </script>
 

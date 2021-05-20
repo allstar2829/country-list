@@ -2,7 +2,7 @@ new Vue({
   el: "#app",
   data: {
     allCountries: [],
-    currentChoosedInfo: null,
+    currentChooseInfo: null,
     isReverse: false,
     isSearch: "",
     tableData: 1,
@@ -11,11 +11,11 @@ new Vue({
     searchedCountriesNum: 1,
   },
   methods: {
-    info_Open(index) {
-      this.currentChoosedInfo = index;
+    infoOpen(index) {
+      this.currentChooseInfo = index;
     },
-    info_Close() {
-      this.currentChoosedInfo = null;
+    infoClose() {
+      this.currentChooseInfo = null;
     },
     changeOrder() {
       this.isReverse = !this.isReverse;

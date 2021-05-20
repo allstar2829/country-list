@@ -4,7 +4,7 @@ new Vue({
   el: "#app",
   data: {
     allCountries: [],
-    currentChoosedInfo: null,
+    currentChooseInfo: null,
     isReverse: false,
     isSearch: "",
     tableData: 1,
@@ -13,11 +13,11 @@ new Vue({
     searchedCountriesNum: 1
   },
   methods: {
-    info_Open: function info_Open(index) {
-      this.currentChoosedInfo = index;
+    infoOpen: function infoOpen(index) {
+      this.currentChooseInfo = index;
     },
-    info_Close: function info_Close() {
-      this.currentChoosedInfo = null;
+    infoClose: function infoClose() {
+      this.currentChooseInfo = null;
     },
     changeOrder: function changeOrder() {
       this.isReverse = !this.isReverse;
@@ -112,4 +112,7 @@ new Vue({
       _this2.tableData = _this2.allCountries.length;
     });
   }
+});tries.length;
+    });
+  },
 });

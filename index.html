@@ -52,12 +52,12 @@
         <div class="content">
           <ul>
             <!-- <li v-for="(item,index) in orderedCountries">
-              <img :src="item.flag" @click="currentChoosedInfo
+              <img :src="item.flag" @click="currentChooseInfo
  = index" />
             </li> -->
 
             <li v-for="(item,index) in orderedCountries">
-              <img :src="item.flag" @click="info_Open(index)" />
+              <img :src="item.flag" @click="infoOpen(index)" />
             </li>
           </ul>
         </div>
@@ -67,43 +67,43 @@
       <transition name="fade">
         <div
           class="infoBg"
-          v-if="currentChoosedInfo
+          v-if="currentChooseInfo
  !== null"
-          @click="info_Close"
+          @click="infoClose"
         ></div>
       </transition>
 
       <transition name="fade">
         <div
           class="info"
-          v-if="currentChoosedInfo
+          v-if="currentChooseInfo
  !== null"
         >
           <div class="info_content">
             <img
-              :src="orderedCountries[currentChoosedInfo
+              :src="orderedCountries[currentChooseInfo
 ].flag"
             />
             <ul>
-              <li>- {{orderedCountries[currentChoosedInfo ].name}}</li>
+              <li>- {{orderedCountries[currentChooseInfo ].name}}</li>
               <br />
               <li>
-                2位國家代碼 : {{orderedCountries[currentChoosedInfo
+                2位國家代碼 : {{orderedCountries[currentChooseInfo
                 ].alpha2Code}}
               </li>
               <li>
-                3位國家代碼 : {{orderedCountries[currentChoosedInfo
+                3位國家代碼 : {{orderedCountries[currentChooseInfo
                 ].alpha3Code}}
               </li>
               <li>
-                母語名稱 : {{orderedCountries[currentChoosedInfo ].nativeName}}
+                母語名稱 : {{orderedCountries[currentChooseInfo ].nativeName}}
               </li>
               <li>
-                替代國家名稱 : {{orderedCountries[currentChoosedInfo
+                替代國家名稱 : {{orderedCountries[currentChooseInfo
                 ].altSpellings}}
               </li>
               <li>
-                國際電話區號 : {{orderedCountries[currentChoosedInfo
+                國際電話區號 : {{orderedCountries[currentChooseInfo
                 ].callingCodes}}
               </li>
             </ul>
@@ -129,7 +129,7 @@
         el: "#app",
         data: {
           allCountries: [],
-          currentChoosedInfo: null,
+          currentChooseInfo: null,
           isReverse: false,
           isSearch: "",
           tableData: 1,
@@ -139,11 +139,11 @@
           isSearch2: true,
         },
         methods: {
-          info_Open(index) {
-            this.currentChoosedInfo = index;
+          infoOpen(index) {
+            this.currentChooseInfo = index;
           },
-          info_Close() {
-            this.currentChoosedInfo = null;
+          infoClose() {
+            this.currentChooseInfo = null;
           },
           changeOrder() {
             // this.isReverse = !this.isReverse

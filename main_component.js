@@ -101,18 +101,18 @@ Vue.component("info-bg", {
   template: `
       <div
         class="infoBg"
-        @click="info_Close_Child"
+        @click="infoClose_Child"
       ></div>
       `,
   methods: {
-    info_Close_Child() {
+    infoClose_Child() {
       this.$emit("update-info-close");
     },
   },
 });
 
-// info藉由props 傳入資料後, 傳入的是showTableData內的[一筆資料] (showTableData[currentChoosedInfo
-]) 有點類似item的概念, 所以獲取的資料就是 showTableData.屬性
+// info藉由props 傳入資料後, 傳入的是showTableData內的[一筆資料] (showTableData[currentChooseInfo
+// ]) 有點類似item的概念, 所以獲取的資料就是 showTableData.屬性
 Vue.component("info", {
   template: `
       <div class="info" v-if="showTableData">
@@ -148,12 +148,12 @@ Vue.component("info", {
 Vue.component("content-data", {
   template: `
       <li>
-        <img :src="showTableData.flag" @click="info_Open_Child"/>
+        <img :src="showTableData.flag" @click="infoOpen_Child"/>
       </li>
     `,
   props: ["show-table-data"],
   methods: {
-    info_Open_Child() {
+    infoOpen_Child() {
       // console.log('abc')
       this.$emit("update-info-open");
     },
@@ -187,10 +187,8 @@ const app = new Vue({
   //   card
   // },
   data: {
-    allCountries
-: [],
-    currentChoosedInfo
-: null,
+    allCountries: [],
+    currentChooseInfo: null,
     isReverse: false,
     isSearch: "",
     tableData: 1,
@@ -198,13 +196,11 @@ const app = new Vue({
     currentPage: 1,
   },
   methods: {
-    info_Open(index) {
-      this.currentChoosedInfo
- = index;
+    infoOpen(index) {
+      this.currentChooseInfo = index;
     },
-    info_Close() {
-      this.currentChoosedInfo
- = null;
+    infoClose() {
+      this.currentChooseInfo = null;
     },
     changeOrder() {
       this.isReverse = !this.isReverse;
@@ -252,8 +248,7 @@ const app = new Vue({
   },
   computed: {
     searchedCountries() {
-      const copiedData = this.allCountries
-.map((x) => x);
+      const copiedData = this.allCountries.map((x) => x);
       let searchedCountriesNum = [];
 
       if (this.isSearch) {
@@ -302,11 +297,9 @@ const app = new Vue({
     // this.testFunction();
 
     axios.get(`https://restcountries.eu/rest/v2/all`).then((response) => {
-      this.allCountries
- = response.data.map((element) => element);
+      this.allCountries = response.data.map((element) => element);
 
-      this.tableData = this.allCountries
-.length;
+      this.tableData = this.allCountries.length;
     });
   },
 });

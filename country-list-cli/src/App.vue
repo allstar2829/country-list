@@ -11,27 +11,27 @@
 
       <div class="content">
         <ul>
-            <content-data v-for="(item,index) in showTableData" :key="index" :show-table-data="item" @click.native="info_Open(index)"></content-data>
+            <content-data v-for="(item,index) in showTableData" :key="index" :show-table-data="item" @click.native="infoOpen(index)"></content-data>
           </ul>
       </div>
     </main>
 
     <transition name="fade">
       <info-bg 
-        v-if="showTableData[this.$store.state.currentChoosedInfo
+        v-if="showTableData[this.$store.state.currentChooseInfo
 ]"
-        @click.native="info_Close"></info-bg>
+        @click.native="infoClose"></info-bg>
     </transition>
 
     <transition name="fade">
       <info 
-        v-if="showTableData[this.$store.state.currentChoosedInfo
+        v-if="showTableData[this.$store.state.currentChooseInfo
 ]" 
-        :show-table-data="showTableData[this.$store.state.currentChoosedInfo
+        :show-table-data="showTableData[this.$store.state.currentChooseInfo
 ]"></info>
     </transition>
 
-    <pagination></pagination>
+    <pagination :max-page="maxPage()"></pagination>
     
   </div>
 </template>
@@ -55,13 +55,11 @@ export default {
     pagination,
   },
   methods: {
-    info_Open(index) {
-      this.$store.state.currentChoosedInfo
- = index;
+    infoOpen(index) {
+      this.$store.commit('infoOpen',index);
     },
-    info_Close() {
-      this.$store.state.currentChoosedInfo
- = null;
+    infoClose() {
+      this.$store.commit('infoClose');
     },
     changeOrder() {
       this.$store.commit('changeOrder');
@@ -71,6 +69,12 @@ export default {
     },
     nextPage() {
       this.$store.commit('nextPage');
+    },
+    maxPage() {
+      let calculatedPage = Math.ceil(this.searchedCountries.length / this.$store.state.pageSize);
+
+      this.$store.commit('calculatedPage', calculatedPage);
+      return calculatedPage
     },
     reset(page) {
       this.$store.state.currentPage = page;
@@ -117,7 +121,7 @@ export default {
     axios.get(`https://restcountries.eu/rest/v2/all`).then((response) => {
       
       const data = response.data.map((element) => element)
-      this.$store.commit('getCountries', data)
+      this.$store.commit('setCountries', data)
     });
   },
 }

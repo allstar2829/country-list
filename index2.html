@@ -58,7 +58,7 @@
         <div class="content">
           <ul>
             <li v-for="(item,index) in showTableData">
-              <img :src="item.flag" @click="info_Open(index)" />
+              <img :src="item.flag" @click="infoOpen(index)" />
             </li>
           </ul>
         </div>
@@ -68,41 +68,41 @@
       <transition name="fade">
         <div
           class="infoBg"
-          v-if="currentChoosedInfo
+          v-if="currentChooseInfo
  !== null"
-          @click="info_Close"
+          @click="infoClose"
         ></div>
       </transition>
 
       <transition name="fade">
         <div
           class="info"
-          v-if="currentChoosedInfo
+          v-if="currentChooseInfo
  !== null"
         >
           <div class="info_content">
             <img
-              :src="showTableData[currentChoosedInfo
+              :src="showTableData[currentChooseInfo
 ].flag"
             />
             <ul>
-              <li>- {{showTableData[currentChoosedInfo ].name}}</li>
+              <li>- {{showTableData[currentChooseInfo ].name}}</li>
               <br />
               <li>
-                2位國家代碼 : {{showTableData[currentChoosedInfo ].alpha2Code}}
+                2位國家代碼 : {{showTableData[currentChooseInfo ].alpha2Code}}
               </li>
               <li>
-                3位國家代碼 : {{showTableData[currentChoosedInfo ].alpha3Code}}
+                3位國家代碼 : {{showTableData[currentChooseInfo ].alpha3Code}}
               </li>
               <li>
-                母語名稱 : {{showTableData[currentChoosedInfo ].nativeName}}
+                母語名稱 : {{showTableData[currentChooseInfo ].nativeName}}
               </li>
               <li>
-                替代國家名稱 : {{showTableData[currentChoosedInfo
+                替代國家名稱 : {{showTableData[currentChooseInfo
                 ].altSpellings}}
               </li>
               <li>
-                國際電話區號 : {{showTableData[currentChoosedInfo
+                國際電話區號 : {{showTableData[currentChooseInfo
                 ].callingCodes}}
               </li>
             </ul>

@@ -5,7 +5,7 @@ var store = new Vuex.Store({
   state: {
     // 類似new Vue()裡面的data
     allCountries: [],
-    currentChoosedInfo: null,
+    currentChooseInfo: null,
     isReverse: false,
     isSearch: "",
     tableData: 1,
@@ -14,11 +14,11 @@ var store = new Vuex.Store({
   },
   mutations: {
     // 類似new Vue()裡面的methods
-    info_Open: function info_Open(index) {
-      this.currentChoosedInfo = index;
+    infoOpen: function infoOpen(index) {
+      this.currentChooseInfo = index;
     },
-    info_Close: function info_Close() {
-      this.currentChoosedInfo = null;
+    infoClose: function infoClose() {
+      this.currentChooseInfo = null;
     },
     changeOrder: function changeOrder() {
       this.isReverse = !this.isReverse;
@@ -63,9 +63,9 @@ Vue.component("order-btn", {
 });
 Vue.component("info-bg", {
   template:
-    '\n    <div\n      class="infoBg"\n      @click="info_Close_Child"\n    ></div>\n    ',
+    '\n    <div\n      class="infoBg"\n      @click="infoClose_Child"\n    ></div>\n    ',
   methods: {
-    info_Close_Child: function info_Close_Child() {
+    infoClose_Child: function infoClose_Child() {
       this.$emit("update-info-close");
     },
   },
@@ -77,7 +77,7 @@ Vue.component("info", {
 });
 Vue.component("content-data", {
   template:
-    '\n    <li>\n      <img :src="item.flag" @click.native="info_Open(index)"/>\n    </li>\n  ',
+    '\n    <li>\n      <img :src="item.flag" @click.native="infoOpen(index)"/>\n    </li>\n  ',
 });
 Vue.component("pagination", {
   template:
@@ -99,7 +99,7 @@ var app = new Vue({
   store: store,
   data: {
     allCountries: [],
-    currentChoosedInfo: null,
+    currentChooseInfo: null,
     isReverse: false,
     isSearch: "",
     tableData: 1,
@@ -107,11 +107,11 @@ var app = new Vue({
     currentPage: 1,
   },
   methods: {
-    info_Open: function info_Open(index) {
-      this.currentChoosedInfo = index;
+    infoOpen: function infoOpen(index) {
+      this.currentChooseInfo = index;
     },
-    info_Close: function info_Close() {
-      this.currentChoosedInfo = null;
+    infoClose: function infoClose() {
+      this.currentChooseInfo = null;
     },
     changeOrder: function changeOrder() {
       this.isReverse = !this.isReverse;

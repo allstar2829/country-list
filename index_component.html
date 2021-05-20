@@ -53,14 +53,14 @@
         <div class="content">
           <ul>
             <!-- 此處 item = showTableData[index] -->
-            <!-- <content-data :show-table-data="item" :key="index" v-for="(item,index) in showTableData" @update-info-open="info_Open(index)"></content-data> -->
+            <!-- <content-data :show-table-data="item" :key="index" v-for="(item,index) in showTableData" @update-info-open="infoOpen(index)"></content-data> -->
 
             <!-- v-for 迴圈的 item,index 都只有for 迴圈可用 別再忘記了=_=! -->
             <content-data
               :show-table-data="item"
               :key="index"
               v-for="(item,index) in showTableData"
-              @click.native="info_Open(index)"
+              @click.native="infoOpen(index)"
             ></content-data>
           </ul>
         </div>
@@ -69,25 +69,25 @@
       <!-- 資訊彈窗 -->
       <transition name="fade">
         <info-bg
-          v-if="showTableData[currentChoosedInfo
+          v-if="showTableData[currentChooseInfo
 ]"
-          @update-info-close="info_Close"
+          @update-info-close="infoClose"
         ></info-bg>
       </transition>
 
       <transition name="fade">
         <!-- show-table-data="item" > 會報錯, 因為item沒有vue實例中/ 只有剛剛for 迴圈有
-        所以改為判斷時看的index值 應該是 [currentChoosedInfo
+        所以改為判斷時看的index值 應該是 [currentChooseInfo
 ] -->
-        <!-- <info :show-table-data="showTableData[currentChoosedInfo
+        <!-- <info :show-table-data="showTableData[currentChooseInfo
 ]"></info> -->
-        <!-- info前加入 v-if 表示如果有資料 showTableData[currentChoosedInfo
+        <!-- info前加入 v-if 表示如果有資料 showTableData[currentChooseInfo
 ] 才顯示
         因為也會有有資料但沒有項目的時候 > 所以info 內li 同理 -->
         <info
-          v-if="showTableData[currentChoosedInfo
+          v-if="showTableData[currentChooseInfo
 ]"
-          :show-table-data="showTableData[currentChoosedInfo
+          :show-table-data="showTableData[currentChooseInfo
 ]"
         ></info>
       </transition>
